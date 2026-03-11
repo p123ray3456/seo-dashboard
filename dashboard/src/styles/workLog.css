@@ -1,0 +1,146 @@
+.wl-wrapper {
+  max-width: 1200px;
+}
+
+/* Header */
+.wl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.wl-header h4 {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.wl-header p {
+  color: #6c757d;
+  margin: 0;
+  font-size: 14px;
+}
+
+.wl-month {
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  font-size: 14px;
+}
+
+/* Monthly Status */
+.wl-status-box {
+  display: flex;
+  gap: 14px;
+  background: #f3f6ff;
+  border: 1px solid #dbe7ff;
+  padding: 16px 18px;
+  border-radius: 14px;
+  margin-bottom: 26px;
+}
+
+.wl-status-icon {
+  font-size: 20px;
+  margin-top: 2px;
+}
+
+.wl-status-box h6 {
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+.wl-status-box p {
+  margin: 0;
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.5;
+}
+
+/* Grid */
+.wl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+/* Cards */
+.wl-card {
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.wl-card h6 {
+  font-weight: 600;
+  margin-bottom: 16px;
+  font-size: 15px;
+}
+
+.wl-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Items */
+.wl-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px dashed #eef2f7;
+  background: transparent !important; /* 🔥 FIX */
+}
+
+.wl-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.wl-item p {
+  margin: 0;
+  font-size: 14px;
+  color: #0f172a;
+  line-height: 1.4;
+}
+
+.wl-item small {
+  display: block;
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* Status dots */
+.wl-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+
+.wl-dot.done {
+  background: #22c55e;
+}
+
+.wl-dot.progress {
+  background: #f59e0b;
+}
+
+.wl-dot.pending {
+  background: #cbd5e1;
+}
+
+/* Progress label */
+.in-progress {
+  font-size: 12px;
+  color: #f59e0b;
+  margin-top: 2px;
+  display: inline-block;
+}

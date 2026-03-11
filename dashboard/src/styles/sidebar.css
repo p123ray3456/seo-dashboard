@@ -1,0 +1,63 @@
+/* ===== CLIENT DASHBOARD SIDEBAR ===== */
+
+.client-sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: #0f172a;
+  padding: 20px 16px;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+/* Logo / Title */
+.client-sidebar h2 {
+  color: #ffffff;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+/* Nav list */
+.client-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Nav links */
+.client-sidebar a {
+  display: block;
+  color: #cbd5e1;
+  text-decoration: none;
+  padding: 10px 14px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.client-sidebar a:hover {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+/* Active page */
+.client-sidebar a.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* Prevent Bootstrap/global link override */
+.client-sidebar a:link,
+.client-sidebar a:visited {
+  color: #cbd5e1;
+  text-decoration: none;
+}
+
+/* Content shift (important) */
+.client-dashboard-content {
+  margin-left: 240px;
+  padding: 24px;
+}

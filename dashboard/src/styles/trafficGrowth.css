@@ -1,0 +1,80 @@
+.tg-wrapper {
+  max-width: 1200px;
+}
+
+/* Header */
+.tg-header h4 {
+  font-weight: 600;
+}
+
+.tg-header p {
+  color: #6c757d;
+}
+
+/* KPI Cards */
+.tg-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.tg-metric-card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.tg-metric-card small {
+  color: #6c757d;
+}
+
+/* Charts */
+.tg-chart {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  margin-bottom: 20px;
+}
+
+/* Grid */
+.tg-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+.tg-card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+/* Skeletons */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f1f1f1 25%,
+    #e6e6e6 37%,
+    #f1f1f1 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+.tg-chart-skeleton {
+  height: 260px;
+  border-radius: 12px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}

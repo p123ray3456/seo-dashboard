@@ -1,0 +1,156 @@
+.ao-wrapper {
+  max-width: 1100px;
+}
+
+/* Header */
+.ao-header {
+  margin-bottom: 20px;
+}
+
+.ao-header h4 {
+  font-weight: 600;
+}
+
+.ao-header p {
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Stats */
+.ao-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.ao-card {
+  background: #fff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ao-card h3 {
+  margin: 4px 0;
+  font-weight: 600;
+}
+
+.ao-card small {
+  color: #6c757d;
+}
+
+.ao-card i {
+  font-size: 24px;
+  color: #0d6efd;
+}
+
+.ao-card .up {
+  color: #16a34a;
+  font-size: 12px;
+}
+
+.ao-card .muted {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+/* Grid */
+.ao-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+}
+
+/* Boxes */
+.ao-box {
+  background: #fff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+}
+
+.ao-box h6 {
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Activity */
+.activity-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.activity-item .badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e0ebff;
+  color: #0d6efd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.activity-item p {
+  margin: 2px 0;
+  font-size: 14px;
+}
+
+.activity-item small {
+  color: #6c757d;
+}
+
+/* Tasks */
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.task-item > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-item.high {
+  background: #fff1f2;
+}
+
+.task-item.med {
+  background: #fff7ed;
+}
+
+.task-item.low {
+  background: #f0fdf4;
+}
+
+.priority {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.priority.high {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.priority.med {
+  background: #fed7aa;
+  color: #9a3412;
+}
+
+.priority.low {
+  background: #bbf7d0;
+  color: #166534;
+}

@@ -1,0 +1,186 @@
+/* PAGE BACKGROUND */
+body {
+  background: #f4f7fc;
+  font-family: "Inter", sans-serif;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  width: 250px;
+  background: #0f172a;
+  min-height: 100vh;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar h4 {
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+/* SIDEBAR MENU */
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #cbd5e1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: 0.2s;
+}
+
+.sidebar a:hover {
+  background: #1e293b;
+  color: white;
+}
+
+.sidebar a.active {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  color: white;
+}
+
+/* MAIN CONTENT */
+
+.main-content {
+  flex: 1;
+  padding: 30px;
+}
+
+/* KPI CARDS */
+
+.dashboard-card {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: 0.25s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.dashboard-card h6 {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.dashboard-card h3 {
+  font-weight: 700;
+}
+
+/* INSIGHT BOX */
+
+.insight-box {
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+/* DATA SOURCE */
+
+.data-source {
+  background: #f1f5f9;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.dashboard-wrapper{
+display:flex;
+min-height:100vh;
+background:#f5f7fb;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:260px;
+background:#0f172a;
+color:white;
+padding:20px;
+transition:0.3s;
+}
+
+.sidebar h4{
+color:white;
+margin-bottom:25px;
+}
+
+/* MENU */
+
+.menu-link{
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px 12px;
+border-radius:8px;
+color:#cbd5e1;
+text-decoration:none;
+margin-bottom:6px;
+}
+
+.menu-link:hover{
+background:#1e293b;
+color:white;
+}
+
+.menu-link.active{
+background:#2563eb;
+color:white;
+}
+
+/* MAIN CONTENT */
+
+.main-content{
+flex:1;
+padding:25px;
+}
+
+/* MOBILE HEADER */
+
+.mobile-header{
+display:none;
+background:#0f172a;
+color:white;
+padding:12px 15px;
+align-items:center;
+}
+
+.menu-btn{
+border:none;
+background:none;
+color:white;
+font-size:22px;
+margin-right:10px;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.sidebar{
+position:fixed;
+left:-260px;
+top:0;
+height:100%;
+z-index:999;
+}
+
+.sidebar.open{
+left:0;
+}
+
+.mobile-header{
+display:flex;
+}
+
+.main-content{
+padding:15px;
+}
+
+}

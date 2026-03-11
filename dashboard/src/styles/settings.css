@@ -1,0 +1,125 @@
+.settings-wrapper {
+  max-width: 1100px;
+}
+
+/* Header */
+.settings-header {
+  margin-bottom: 20px;
+}
+
+.settings-header h4 {
+  font-weight: 600;
+}
+
+.settings-header p {
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Card */
+.settings-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+}
+
+.settings-card h6 {
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Grid */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.settings-grid label {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.settings-grid input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #475569;
+  font-size: 14px;
+}
+
+/* Highlight section */
+.settings-card.highlight {
+  background: #f8fbff;
+  border: 1px solid #e0ebff;
+}
+
+.settings-desc {
+  color: #475569;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+/* Data sources */
+.source-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.source-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #eef2f7;
+}
+
+.source-card h6 {
+  font-weight: 600;
+  margin: 6px 0;
+}
+
+.source-card small {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.source-card p {
+  font-size: 13px;
+  color: #475569;
+  margin-top: 8px;
+}
+
+/* Badges */
+.source-badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.source-badge.ga {
+  background: #fff4e5;
+  color: #f97316;
+}
+
+.source-badge.gsc {
+  background: #eef2ff;
+  color: #6366f1;
+}
+
+.source-badge.rank {
+  background: #f3e8ff;
+  color: #9333ea;
+}
+
+.source-badge.audit {
+  background: #ecfeff;
+  color: #0891b2;
+}

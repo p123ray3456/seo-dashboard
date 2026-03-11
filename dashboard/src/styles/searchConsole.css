@@ -1,0 +1,229 @@
+.sc-wrapper {
+  max-width: 1100px;
+}
+
+/* Header */
+.sc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.sc-header h4 {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.sc-header p {
+  color: #6c757d;
+  margin: 0;
+}
+
+.sc-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sc-select {
+  border: 1px solid #e5e7eb;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #fff;
+}
+
+/* Verified badge */
+.sc-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  background: #f1fdf7;
+  color: #198754;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.sc-badge .dot {
+  width: 8px;
+  height: 8px;
+  background: #198754;
+  border-radius: 50%;
+}
+
+/* KPI Cards */
+.sc-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.metric-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.metric-card small {
+  color: #6c757d;
+}
+
+.metric-card h3 {
+  margin: 6px 0;
+  font-weight: 600;
+}
+
+.metric-card .up {
+  color: #198754;
+  font-size: 13px;
+}
+
+.metric-card .down {
+  color: #6c757d;
+  font-size: 13px;
+}
+
+/* Tables */
+.sc-tables {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.sc-table {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.sc-table h6 {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.sc-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sc-table th {
+  text-align: left;
+  font-size: 12px;
+  color: #6c757d;
+  padding-bottom: 8px;
+}
+
+.sc-table td {
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.sc-table tr:not(:last-child) td {
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.sc-table a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+.sc-chart {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.sc-chart h6 {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.sc-tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.sc-tabs button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  padding-bottom: 6px;
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.sc-tabs button.active {
+  color: #0d6efd;
+  border-bottom: 2px solid #0d6efd;
+  font-weight: 500;
+}
+.sc-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sc-filters input,
+.sc-filters select {
+  border: 1px solid #e5e7eb;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  background: #fff;
+}
+/* Skeleton Base */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f1f1f1 25%,
+    #e6e6e6 37%,
+    #f1f1f1 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+  border-radius: 12px;
+}
+
+/* KPI Skeleton */
+.metric-card.skeleton {
+  height: 96px;
+}
+
+/* Chart Skeleton */
+.skeleton-chart {
+  height: 260px;
+  margin-bottom: 28px;
+}
+
+/* Table Skeleton */
+.skeleton-table {
+  padding: 16px;
+}
+
+.skeleton-row {
+  height: 14px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  background: #e6e6e6;
+}
+
+/* Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.sc-export {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}

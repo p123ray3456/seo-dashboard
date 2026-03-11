@@ -1,0 +1,105 @@
+.nmp-wrapper {
+  max-width: 900px;
+}
+
+/* Header */
+.nmp-header {
+  margin-bottom: 20px;
+}
+
+.nmp-header h4 {
+  font-weight: 600;
+}
+
+.nmp-header p {
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Timeline container */
+.nmp-timeline {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 24px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+/* ONE continuous vertical line */
+.nmp-timeline::before {
+  content: "";
+  position: absolute;
+  left: 36px;
+  top: 32px;
+  bottom: 32px;
+  width: 2px;
+  background: #dbe7ff;
+}
+
+/* Timeline item */
+.nmp-item {
+  display: flex;
+  gap: 20px;
+  position: relative;
+  padding-bottom: 28px;
+}
+
+.nmp-item:last-child {
+  padding-bottom: 0;
+}
+
+/* Bullet container */
+.nmp-line {
+  width: 24px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Bullet */
+.nmp-dot {
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  transition: all 0.25s ease;
+}
+
+/* Hover effect (bullet turns blue) */
+.nmp-item:hover .nmp-dot {
+  background: #0d6efd;
+  border-color: #0d6efd;
+}
+
+/* Card */
+.nmp-card {
+  flex: 1;
+  background: #f9fafb;
+  border: 1px solid #eef2f7;
+  padding: 14px 16px;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+}
+
+.nmp-item:hover .nmp-card {
+  background: #f1f5ff;
+  border-color: #dbe7ff;
+}
+
+.nmp-card h6 {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Badge */
+.nmp-badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #e7f0ff;
+  color: #0d6efd;
+  font-weight: 500;
+}

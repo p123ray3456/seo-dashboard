@@ -1,0 +1,66 @@
+.ms-wrapper {
+  max-width: 1000px;
+}
+
+/* Header */
+.ms-header {
+  margin-bottom: 18px;
+}
+
+.ms-header h4 {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.ms-header p {
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Card */
+.ms-card {
+  background: #f3f7ff;
+  border: 1px solid #dbe7ff;
+  border-radius: 14px;
+  padding: 22px;
+}
+
+/* Title */
+.ms-card h5 {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Content */
+.ms-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #334155;
+  margin-bottom: 12px;
+}
+
+/* Author */
+.ms-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.ms-avatar {
+  width: 38px;
+  height: 38px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ms-author small {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+}

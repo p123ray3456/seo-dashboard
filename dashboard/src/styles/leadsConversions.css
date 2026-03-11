@@ -1,0 +1,147 @@
+.lc-wrapper {
+  max-width: 1200px;
+}
+
+/* Header */
+.lc-header h4 {
+  font-weight: 600;
+}
+
+.lc-header p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+/* Metrics */
+.lc-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 18px 0;
+}
+
+.lc-metric {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.lc-metric-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #eef2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2563eb;
+  font-size: 18px;
+}
+
+.lc-metric small {
+  color: #6c757d;
+}
+
+.lc-metric h3 {
+  margin: 2px 0;
+  font-weight: 600;
+}
+
+.lc-sub {
+  font-size: 12px;
+  color: #22c55e;
+}
+
+/* Grid */
+.lc-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 18px;
+}
+
+/* Cards */
+.lc-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.lc-card h6 {
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+/* Conversion Actions */
+.lc-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f8fafc;
+  margin-bottom: 10px;
+}
+
+.lc-action span {
+  flex: 1;
+  font-size: 14px;
+}
+
+.lc-action strong {
+  font-weight: 600;
+}
+
+/* Icons */
+.lc-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #fff;
+}
+
+.lc-icon.blue {
+  background: #2563eb;
+}
+
+.lc-icon.green {
+  background: #22c55e;
+}
+
+.lc-icon.orange {
+  background: #f59e0b;
+}
+
+/* Chart */
+.lc-chart {
+  margin-top: 8px;
+}
+
+.lc-legend {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  font-size: 13px;
+}
+
+.lc-legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
