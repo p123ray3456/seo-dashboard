@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import "../styles/worklog.css";
+import "../styles/workLog.css";
 
 const WorkLog = () => {
 
