@@ -9,7 +9,7 @@ const ManageClients = () => {
   /* ================= FETCH CLIENTS FROM MONGODB ================= */
 
   useEffect(() => {
-    fetch("http://localhost:5000/clients")
+    fetch("https://seo-dashboard-production-ec44.up.railway.app/clients")
       .then((res) => res.json())
       .then((data) => {
         setClients(data);

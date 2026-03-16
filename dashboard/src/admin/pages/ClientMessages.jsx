@@ -12,7 +12,7 @@ const ClientMessages = () => {
   const loadMessages = async () => {
 
     const res = await axios.get(
-      "http://localhost:5000/support-messages"
+      "https://seo-dashboard-production-ec44.up.railway.app/support-messages"
     );
 
     setMessages(res.data);

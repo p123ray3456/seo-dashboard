@@ -15,7 +15,7 @@ const AdminSettings = () => {
 
   const loadSettings = async () => {
 
-    const res = await axios.get("http://localhost:5000/admin/settings");
+    const res = await axios.get("https://seo-dashboard-production-ec44.up.railway.app/admin/settings");
 
     if(res.data){
 

@@ -17,7 +17,7 @@ const NextMonthPlan = () => {
     try {
 
       const res = await axios.get(
-        `http://localhost:5000/next-month-plan/${clientId}`
+        `https://seo-dashboard-production-ec44.up.railway.app/next-month-plan/${clientId}`
       );
 
       setPlan(res.data);

@@ -79,7 +79,7 @@ const WorkLogManager = ({ clientId }) => {
     try {
 
       const res = await fetch(
-        `http://localhost:5000/seo/work-log?clientId=${clientId}&month=${month}`
+        `https://seo-dashboard-production-ec44.up.railway.app/seo/work-log?clientId=${clientId}&month=${month}`
       );
 
       const data = await res.json();

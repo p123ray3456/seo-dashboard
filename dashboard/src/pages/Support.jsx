@@ -18,7 +18,7 @@ const Support = () => {
 
     try{
 
-      await axios.post("http://localhost:5000/support-message",{
+      await axios.post("https://seo-dashboard-production-ec44.up.railway.app/support-message",{
         clientId,
         subject,
         message

@@ -24,7 +24,7 @@ const TeamMembers = () => {
     try {
 
       const res = await axios.get(
-        "http://localhost:5000/team-members"
+        "https://seo-dashboard-production-ec44.up.railway.app/team-members"
       );
 
       setMembers(res.data);

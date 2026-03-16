@@ -30,7 +30,7 @@ const AddClient = () => {
         ...form,
       };
 
-      const res = await fetch("http://localhost:5000/clients", {
+      const res = await fetch("https://seo-dashboard-production-ec44.up.railway.app/clients", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

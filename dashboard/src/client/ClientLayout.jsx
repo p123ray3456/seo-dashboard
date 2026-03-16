@@ -19,7 +19,7 @@ const ClientLayout = () => {
 
   useEffect(() => {
 
-    fetch(`http://localhost:5000/clients/${clientId}`)
+    fetch(`https://seo-dashboard-production-ec44.up.railway.app/clients/${clientId}`)
       .then(res => res.json())
       .then(data => {
         if (data?.name) setClientName(data.name);

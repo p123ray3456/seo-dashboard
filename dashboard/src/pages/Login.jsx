@@ -20,7 +20,7 @@ const Login = () => {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/auth/login", {
+      const res = await fetch("https://seo-dashboard-production-ec44.up.railway.app/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

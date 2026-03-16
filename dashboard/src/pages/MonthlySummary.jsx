@@ -16,9 +16,9 @@ const MonthlySummary = () => {
 
     try {
 
-      const res = await axios.get(
-        `http://localhost:5000/monthly-summary/${clientId}`
-      );
+      const res = await fetch(
+  `https://seo-dashboard-production-ec44.up.railway.app/seo/search-console?clientId=${clientId}&range=${range}`
+);
 
       setReport(res.data);
 

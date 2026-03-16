@@ -33,7 +33,7 @@ const TrafficGrowth = () => {
         setLoading(true);
 
         const res = await fetch(
-          `http://localhost:5000/seo/traffic-growth?clientId=${clientId}&range=${range}`
+          `https://seo-dashboard-production-ec44.up.railway.app/seo/traffic-growth?clientId=${clientId}&range=${range}`
         );
 
         const result = await res.json();
