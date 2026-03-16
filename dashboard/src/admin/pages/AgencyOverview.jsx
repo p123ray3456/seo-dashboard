@@ -48,7 +48,7 @@ const AgencyOverview = () => {
     try{
 
       const res = await axios.get(
-        "http://localhost:5000/agency-reports"
+        "https://seo-dashboard-production-ec44.up.railway.app/agency-reports"
       );
 
       setReports(res.data);

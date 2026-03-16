@@ -40,7 +40,7 @@ const EditNextMonthPlan = () => {
    status:"Planned"
   }));
 
-  await axios.post("http://localhost:5000/next-month-plan",{
+  await axios.post("https://seo-dashboard-production-ec44.up.railway.app/next-month-plan",{
 
    clientId,
    month,

@@ -131,7 +131,7 @@ const WorkLogManager = ({ clientId }) => {
 
   const saveWorkLog = async () => {
 
-    await fetch("http://localhost:5000/seo/work-log",{
+    await fetch("https://seo-dashboard-production-ec44.up.railway.app/seo/work-log",{
 
       method:"POST",
 
@@ -249,7 +249,7 @@ const LeadsManager = ({clientId}) => {
 
   const saveLeads = async () => {
 
-    await fetch("http://localhost:5000/seo/leads",{
+    await fetch("https://seo-dashboard-production-ec44.up.railway.app/seo/leads",{
 
       method:"POST",
 

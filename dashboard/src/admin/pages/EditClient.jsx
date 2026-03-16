@@ -46,7 +46,7 @@ const EditClient = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`http://localhost:5000/clients/${clientId}`, {
+      const res = await fetch(`https://seo-dashboard-production-ec44.up.railway.app/clients/${clientId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const EditClient = () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/clients/${clientId}`, {
+      const res = await fetch(`https://seo-dashboard-production-ec44.up.railway.app/clients/${clientId}`, {
         method: "DELETE",
       });
 

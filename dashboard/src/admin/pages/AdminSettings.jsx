@@ -30,7 +30,7 @@ const AdminSettings = () => {
 
   const saveSettings = async () => {
 
-    await axios.post("http://localhost:5000/admin/settings",{
+    await axios.post("https://seo-dashboard-production-ec44.up.railway.app/admin/settings",{
 
       agencyName,
       email,

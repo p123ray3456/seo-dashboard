@@ -49,7 +49,7 @@ const TeamMembers = () => {
     try {
 
       await axios.post(
-        "http://localhost:5000/team-members",
+        "https://seo-dashboard-production-ec44.up.railway.app/team-members",
         {
           ...newMember,
           status: "Active"
@@ -81,7 +81,7 @@ const TeamMembers = () => {
     try {
 
       await axios.delete(
-        `http://localhost:5000/team-members/${id}`
+        `https://seo-dashboard-production-ec44.up.railway.app/team-members/${id}`
       );
 
       fetchMembers();
@@ -101,7 +101,7 @@ const TeamMembers = () => {
     try {
 
       await axios.put(
-        `http://localhost:5000/team-members/${id}`,
+        `https://seo-dashboard-production-ec44.up.railway.app/team-members/${id}`,
         { role }
       );
 
@@ -124,7 +124,7 @@ const TeamMembers = () => {
     try {
 
       await axios.put(
-        `http://localhost:5000/team-members/${member._id}`,
+        `https://seo-dashboard-production-ec44.up.railway.app/team-members/${member._id}`,
         { status: newStatus }
       );
 

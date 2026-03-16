@@ -40,7 +40,7 @@ const EditMonthlySummary = () => {
     try {
 
       const res = await axios.get(
-        "http://localhost:5000/team-members"
+        "https://seo-dashboard-production-ec44.up.railway.app/team-members"
       );
 
       setTeamMembers(res.data);
@@ -71,7 +71,7 @@ const EditMonthlySummary = () => {
     try {
 
       await axios.post(
-        "http://localhost:5000/monthly-summary",
+        "https://seo-dashboard-production-ec44.up.railway.app/monthly-summary",
         {
           clientId,
           month,
