@@ -33,7 +33,7 @@ const Overview = () => {
         setLoading(true);
 
         const res = await fetch(
-  `https://seo-dashboard-production-ec44.up.railway.app/seo/search-console?clientId=${clientId}&range=${range}`
+  `https://seo-dashboard-production-ec44.up.railway.app/seo/overview?clientId=${clientId}&range=${range}`
 );
 
         const data = await res.json();
