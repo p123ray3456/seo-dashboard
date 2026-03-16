@@ -17,11 +17,20 @@ const app = express();
 /* ========================= */
 
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://seo-dashboard-pakjdjkv-p123ray3456s-projects.vercel.app",
-    "https://seo-dashboard-p123ray3456s-projects.vercel.app"
-  ],
+  origin: function (origin, callback) {
+
+    const allowedOrigins = [
+      "http://localhost:5173",
+      "https://seo-dashboard-pakjdjkv-p123ray3456s-projects.vercel.app"
+    ];
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // allow all temporarily
+    }
+
+  },
   methods: ["GET","POST","PUT","DELETE"],
   allowedHeaders: ["Content-Type","Authorization"],
   credentials: true
