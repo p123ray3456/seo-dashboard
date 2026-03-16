@@ -144,3 +144,36 @@
   margin-top: 2px;
   display: inline-block;
 }
+/* ================= MOBILE RESPONSIVE ================= */
+
+@media (max-width:768px){
+
+.wl-wrapper{
+max-width:100%;
+}
+
+.wl-header{
+flex-direction:column;
+align-items:flex-start;
+gap:8px;
+}
+
+.wl-grid{
+grid-template-columns:1fr;
+}
+
+.wl-status-box{
+flex-direction:column;
+}
+
+}
+
+/* ================= TABLET ================= */
+
+@media (max-width:992px){
+
+.wl-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+}

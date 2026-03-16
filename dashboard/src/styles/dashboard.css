@@ -184,3 +184,107 @@ padding:15px;
 }
 
 }
+/* ===============================
+GLOBAL DASHBOARD RESPONSIVE FIX
+================================ */
+
+/* Container */
+
+.dashboard-container{
+display:flex;
+min-height:100vh;
+background:#f1f5f9;
+}
+
+/* Sidebar */
+
+.sidebar{
+width:260px;
+background:#0f172a;
+color:white;
+padding:25px 20px;
+transition:0.3s;
+}
+
+/* Main Content */
+
+.main-content{
+flex:1;
+padding:35px;
+}
+
+/* ===============================
+TABLET
+================================ */
+
+@media (max-width:992px){
+
+.sidebar{
+width:220px;
+}
+
+.main-content{
+padding:25px;
+}
+
+}
+
+/* ===============================
+MOBILE
+================================ */
+
+@media (max-width:768px){
+
+.dashboard-container{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+position:relative;
+}
+
+.main-content{
+padding:20px;
+}
+
+}
+
+/* ===============================
+TABLE RESPONSIVE
+================================ */
+
+.table-responsive{
+overflow-x:auto;
+}
+
+.table th,
+.table td{
+white-space:nowrap;
+}
+
+/* ===============================
+CARDS GRID
+================================ */
+
+.dashboard-cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+}
+
+@media (max-width:992px){
+
+.dashboard-cards{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media (max-width:576px){
+
+.dashboard-cards{
+grid-template-columns:1fr;
+}
+
+}

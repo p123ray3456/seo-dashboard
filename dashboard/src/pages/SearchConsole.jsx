@@ -11,23 +11,24 @@ import {
 } from "recharts";
 
 const SearchConsole = () => {
+
   const [range, setRange] = useState(30);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [apiData, setApiData] = useState([]);
   const [error, setError] = useState(null);
 
-  /* ================================
-     FETCH SEARCH CONSOLE DATA
-  ================================== */
+  /* ================= FETCH DATA ================= */
 
   useEffect(() => {
+
     const fetchData = async () => {
+
       try {
+
         setLoading(true);
         setError(null);
 
-        // ✅ get clientId from login session
         const clientId = localStorage.getItem("clientId");
 
         if (!clientId) {
@@ -47,22 +48,28 @@ const SearchConsole = () => {
         const data = await res.json();
 
         setApiData(data.rows || []);
+
       } catch (err) {
-        console.error("Search console error:", err);
+
+        console.error(err);
         setError("Unable to load Search Console data");
+
       } finally {
+
         setLoading(false);
+
       }
+
     };
 
     fetchData();
+
   }, [range]);
 
-  /* ================================
-     KPI METRICS
-  ================================== */
+  /* ================= KPI METRICS ================= */
 
   const metrics = useMemo(() => {
+
     if (!apiData.length) return null;
 
     let impressions = 0;
@@ -70,9 +77,11 @@ const SearchConsole = () => {
     let position = 0;
 
     apiData.forEach((row) => {
+
       impressions += row.impressions || 0;
       clicks += row.clicks || 0;
       position += row.position || 0;
+
     });
 
     const ctr = impressions ? (clicks / impressions) * 100 : 0;
@@ -83,11 +92,10 @@ const SearchConsole = () => {
       ctr: ctr.toFixed(2),
       position: (position / apiData.length).toFixed(1),
     };
+
   }, [apiData]);
 
-  /* ================================
-     TABLE DATA
-  ================================== */
+  /* ================= TABLE DATA ================= */
 
   const queryRows = apiData.map((row) => ({
     label: row.keys?.[0] || "keyword",
@@ -101,9 +109,7 @@ const SearchConsole = () => {
     row.label.toLowerCase().includes(search.toLowerCase())
   );
 
-  /* ================================
-     CHART DATA
-  ================================== */
+  /* ================= CHART DATA ================= */
 
   const chartData = apiData.slice(0, 12).map((row) => ({
     keyword: row.keys?.[0],
@@ -112,9 +118,11 @@ const SearchConsole = () => {
   }));
 
   return (
-    <div className="sc-wrapper">
+
+    <div className="sc-wrapper container-fluid">
 
       {/* HEADER */}
+
       <div className="sc-header">
 
         <div>
@@ -126,7 +134,7 @@ const SearchConsole = () => {
 
         <select
           className="form-select"
-          style={{ width: "160px" }}
+          style={{ maxWidth: "180px" }}
           value={range}
           onChange={(e) => setRange(Number(e.target.value))}
         >
@@ -138,42 +146,51 @@ const SearchConsole = () => {
       </div>
 
       {/* ERROR */}
+
       {error && (
-        <div className="alert alert-danger mt-3">{error}</div>
+        <div className="alert alert-danger mt-3">
+          {error}
+        </div>
       )}
 
       {/* LOADING */}
+
       {loading ? (
-        <div className="mt-4">Loading Search Console Data...</div>
+
+        <div className="mt-4">
+          Loading Search Console Data...
+        </div>
+
       ) : (
+
         <>
 
           {/* ================= KPI CARDS ================= */}
 
-          <div className="row g-4 mt-1">
+          <div className="row g-4 mt-2">
 
-            <div className="col-md-3">
+            <div className="col-xl-3 col-md-6 col-12">
               <div className="card shadow-sm border-0 p-3">
                 <small>Total Impressions</small>
                 <h3 className="fw-bold">{metrics?.impressions}</h3>
               </div>
             </div>
 
-            <div className="col-md-3">
+            <div className="col-xl-3 col-md-6 col-12">
               <div className="card shadow-sm border-0 p-3">
                 <small>Total Clicks</small>
                 <h3 className="fw-bold">{metrics?.clicks}</h3>
               </div>
             </div>
 
-            <div className="col-md-3">
+            <div className="col-xl-3 col-md-6 col-12">
               <div className="card shadow-sm border-0 p-3">
                 <small>Average CTR</small>
                 <h3 className="fw-bold">{metrics?.ctr}%</h3>
               </div>
             </div>
 
-            <div className="col-md-3">
+            <div className="col-xl-3 col-md-6 col-12">
               <div className="card shadow-sm border-0 p-3">
                 <small>Average Position</small>
                 <h3 className="fw-bold">{metrics?.position}</h3>
@@ -181,6 +198,7 @@ const SearchConsole = () => {
             </div>
 
           </div>
+
 
           {/* ================= CHART ================= */}
 
@@ -220,7 +238,8 @@ const SearchConsole = () => {
 
           </div>
 
-          {/* ================= FILTER ================= */}
+
+          {/* ================= SEARCH FILTER ================= */}
 
           <div className="mt-4 mb-2">
 
@@ -233,45 +252,52 @@ const SearchConsole = () => {
 
           </div>
 
+
           {/* ================= TABLE ================= */}
 
           <div className="card shadow-sm border-0 p-3">
 
             <h5 className="mb-3">Top Search Queries</h5>
 
-            <table className="table">
+            <div className="table-responsive">
 
-              <thead className="table-light">
-                <tr>
-                  <th>Query</th>
-                  <th>Clicks</th>
-                  <th>Impressions</th>
-                  <th>CTR</th>
-                  <th>Position</th>
-                </tr>
-              </thead>
+              <table className="table table-hover align-middle">
 
-              <tbody>
-
-                {filteredRows.slice(0, 20).map((row, i) => (
-                  <tr key={i}>
-                    <td>{row.label}</td>
-                    <td>{row.clicks}</td>
-                    <td>{row.impressions}</td>
-                    <td>{row.ctr}%</td>
-                    <td>{row.position}</td>
+                <thead className="table-light">
+                  <tr>
+                    <th>Query</th>
+                    <th>Clicks</th>
+                    <th>Impressions</th>
+                    <th>CTR</th>
+                    <th>Position</th>
                   </tr>
-                ))}
+                </thead>
 
-              </tbody>
+                <tbody>
 
-            </table>
+                  {filteredRows.slice(0, 20).map((row, i) => (
+                    <tr key={i}>
+                      <td>{row.label}</td>
+                      <td>{row.clicks}</td>
+                      <td>{row.impressions}</td>
+                      <td>{row.ctr}%</td>
+                      <td>{row.position}</td>
+                    </tr>
+                  ))}
+
+                </tbody>
+
+              </table>
+
+            </div>
 
           </div>
 
         </>
       )}
+
     </div>
+
   );
 };
 

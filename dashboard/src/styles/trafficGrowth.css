@@ -78,3 +78,46 @@
     background-position: 400px 0;
   }
 }
+/* ================= HEADER ================= */
+
+.tg-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:16px;
+gap:12px;
+flex-wrap:wrap;
+}
+
+/* ================= MOBILE RESPONSIVE ================= */
+
+@media (max-width:768px){
+
+.tg-wrapper{
+max-width:100%;
+}
+
+.tg-metrics{
+grid-template-columns:1fr;
+}
+
+.tg-header{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.tg-chart{
+padding:12px;
+}
+
+}
+
+/* ================= TABLET ================= */
+
+@media (max-width:992px){
+
+.tg-metrics{
+grid-template-columns:repeat(2,1fr);
+}
+
+}

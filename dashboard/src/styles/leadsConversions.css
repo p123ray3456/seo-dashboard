@@ -145,3 +145,50 @@
   height: 8px;
   border-radius: 50%;
 }
+/* ================= HEADER ================= */
+
+.lc-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+gap:12px;
+flex-wrap:wrap;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width:768px){
+
+.lc-wrapper{
+max-width:100%;
+}
+
+.lc-metrics{
+grid-template-columns:1fr;
+}
+
+.lc-grid{
+grid-template-columns:1fr;
+}
+
+.lc-header{
+flex-direction:column;
+align-items:flex-start;
+}
+
+}
+
+/* ================= TABLET ================= */
+
+@media (max-width:992px){
+
+.lc-grid{
+grid-template-columns:1fr;
+}
+
+.lc-metrics{
+grid-template-columns:repeat(2,1fr);
+}
+
+}

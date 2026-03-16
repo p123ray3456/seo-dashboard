@@ -165,3 +165,49 @@
     background-position: 400px 0;
   }
 }
+/* ================= MOBILE RESPONSIVE ================= */
+
+@media (max-width:768px){
+
+.kp-wrapper{
+max-width:100%;
+}
+
+.kp-header{
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+}
+
+.kp-actions{
+flex-direction:column;
+gap:10px;
+}
+
+.kp-actions input{
+width:100%;
+}
+
+.kp-summary{
+grid-template-columns:1fr;
+}
+
+.kp-table{
+overflow-x:auto;
+}
+
+.kp-table table{
+min-width:600px;
+}
+
+}
+
+/* ================= TABLET ================= */
+
+@media (max-width:992px){
+
+.kp-summary{
+grid-template-columns:repeat(2,1fr);
+}
+
+}

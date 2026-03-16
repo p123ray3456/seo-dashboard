@@ -32,8 +32,6 @@ const LeadsConversions = () => {
       .then((res) => res.json())
       .then((res) => {
 
-        console.log("Leads API response:", res);
-
         setData(res);
         setLoading(false);
 
@@ -48,10 +46,10 @@ const LeadsConversions = () => {
   }, [clientId, month]);
 
   if (loading)
-    return <div className="p-4">Loading Leads Data...</div>;
+    return <div className="lc-wrapper container-fluid">Loading Leads Data...</div>;
 
   if (!data)
-    return <div className="p-4">No leads data available for this month</div>;
+    return <div className="lc-wrapper container-fluid">No leads data available</div>;
 
   /* ================= CALCULATIONS ================= */
 
@@ -82,10 +80,9 @@ const LeadsConversions = () => {
       color: COLORS[index % COLORS.length],
     })) || [];
 
-  /* ================= UI ================= */
-
   return (
-    <div className="lc-wrapper">
+
+    <div className="lc-wrapper container-fluid">
 
       {/* HEADER */}
 
@@ -97,7 +94,8 @@ const LeadsConversions = () => {
         </div>
 
         <select
-          className="form-select w-auto"
+          className="form-select"
+          style={{ maxWidth: "180px" }}
           value={month}
           onChange={(e) => setMonth(e.target.value)}
         >
@@ -109,6 +107,7 @@ const LeadsConversions = () => {
         </select>
 
       </div>
+
 
       {/* METRICS */}
 
@@ -128,6 +127,7 @@ const LeadsConversions = () => {
         />
 
       </div>
+
 
       {/* GRID */}
 
@@ -157,7 +157,8 @@ const LeadsConversions = () => {
 
         </div>
 
-        {/* LEAD SOURCES PIE CHART */}
+
+        {/* PIE CHART */}
 
         <div className="lc-card">
 
@@ -215,17 +216,15 @@ const LeadsConversions = () => {
       </div>
 
     </div>
+
   );
 };
 
 /* ================= UTIL ================= */
 
 function getCurrentMonth() {
-
   const date = new Date();
-
   return date.toISOString().slice(0, 7);
-
 }
 
 function getLastMonths() {
@@ -236,7 +235,6 @@ function getLastMonths() {
   for (let i = 0; i < 12; i++) {
 
     const d = new Date(date.getFullYear(), date.getMonth() - i, 1);
-
     const month = d.toISOString().slice(0, 7);
 
     months.push(month);
@@ -254,7 +252,7 @@ const COLORS = [
   "#64748b",
 ];
 
-/* ================= COMPONENT ================= */
+/* ================= METRIC CARD ================= */
 
 const MetricCard = ({ title, value, subtitle, icon }) => (
 

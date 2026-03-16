@@ -3,50 +3,100 @@ import axios from "axios";
 
 const EditMonthlySummary = () => {
 
-  const [clients,setClients] = useState([]);
-  const [clientId,setClientId] = useState("");
+  const [clients, setClients] = useState([]);
+  const [teamMembers, setTeamMembers] = useState([]);
 
-  const [month,setMonth] = useState("");
-  const [summary,setSummary] = useState("");
-  const [trafficGrowth,setTrafficGrowth] = useState("");
-  const [focusKeyword,setFocusKeyword] = useState("");
+  const [clientId, setClientId] = useState("");
 
-  useEffect(()=>{
+  const [month, setMonth] = useState("");
+  const [summary, setSummary] = useState("");
+  const [trafficGrowth, setTrafficGrowth] = useState("");
+  const [focusKeyword, setFocusKeyword] = useState("");
+
+  const [authorId, setAuthorId] = useState("");
+
+  /* ================= LOAD DATA ================= */
+
+  useEffect(() => {
     loadClients();
-  },[]);
+    loadTeamMembers();
+  }, []);
 
   const loadClients = async () => {
+    try {
 
-    const res = await axios.get("http://localhost:5000/clients");
+      const res = await axios.get(
+        "http://localhost:5000/clients"
+      );
 
-    setClients(res.data);
+      setClients(res.data);
 
+    } catch (error) {
+      console.log("Client load error", error);
+    }
   };
+
+  const loadTeamMembers = async () => {
+    try {
+
+      const res = await axios.get(
+        "http://localhost:5000/team-members"
+      );
+
+      setTeamMembers(res.data);
+
+    } catch (error) {
+      console.log("Team member load error", error);
+    }
+  };
+
+  /* ================= SAVE REPORT ================= */
 
   const saveReport = async () => {
 
-    if(!clientId){
+    if (!clientId) {
       alert("Please select client");
       return;
     }
 
-    await axios.post("http://localhost:5000/monthly-summary",{
+    if (!authorId) {
+      alert("Please select report author");
+      return;
+    }
 
-      clientId,
-      month,
-      summary,
-      trafficGrowth,
-      focusKeyword,
-      author:"Priyanshu Kumar Singh",
-      role:"SEO Strategist"
+    const author = teamMembers.find(
+      (m) => m._id === authorId
+    );
 
-    });
+    try {
 
-    alert("Monthly Summary Saved");
+      await axios.post(
+        "http://localhost:5000/monthly-summary",
+        {
+          clientId,
+          month,
+          summary,
+          trafficGrowth,
+          focusKeyword,
+
+          author: author.name,
+          role: author.role,
+        }
+      );
+
+      alert("Monthly Summary Saved");
+
+    } catch (error) {
+
+      console.log("Save report error", error);
+
+      alert("Failed to save summary");
+
+    }
 
   };
 
-  return(
+  return (
 
     <div className="container">
 
@@ -56,46 +106,85 @@ const EditMonthlySummary = () => {
 
       <select
         className="form-control mb-3"
-        onChange={(e)=>setClientId(e.target.value)}
+        onChange={(e) => setClientId(e.target.value)}
       >
 
         <option>Select Client</option>
 
-        {clients.map(client=>(
+        {clients.map((client) => (
+
           <option key={client.id} value={client.id}>
             {client.name}
           </option>
+
         ))}
 
       </select>
 
 
+      {/* AUTHOR SELECT */}
+
+      <select
+        className="form-control mb-3"
+        onChange={(e) => setAuthorId(e.target.value)}
+      >
+
+        <option>Select Report Author</option>
+
+        {teamMembers.map((member) => (
+
+          <option key={member._id} value={member._id}>
+            {member.name} — {member.role}
+          </option>
+
+        ))}
+
+      </select>
+
+
+      {/* MONTH */}
+
       <input
         className="form-control mb-3"
         placeholder="Month (Example: March 2026)"
-        onChange={(e)=>setMonth(e.target.value)}
+        onChange={(e) => setMonth(e.target.value)}
       />
+
+
+      {/* SUMMARY */}
 
       <textarea
         className="form-control mb-3"
         placeholder="Monthly Summary"
         rows="4"
-        onChange={(e)=>setSummary(e.target.value)}
+        onChange={(e) => setSummary(e.target.value)}
       />
+
+
+      {/* TRAFFIC GROWTH */}
 
       <input
         className="form-control mb-3"
         placeholder="Traffic Growth (Example: 18%)"
-        onChange={(e)=>setTrafficGrowth(e.target.value)}
+        onChange={(e) => setTrafficGrowth(e.target.value)}
       />
+
+
+      {/* FOCUS KEYWORD */}
 
       <input
         className="form-control mb-3"
         placeholder="Focus Keyword"
-        onChange={(e)=>setFocusKeyword(e.target.value)}
+        onChange={(e) => setFocusKeyword(e.target.value)}
       />
 
-      <button className="btn btn-primary" onClick={saveReport}>
+
+      {/* SAVE BUTTON */}
+
+      <button
+        className="btn btn-primary"
+        onClick={saveReport}
+      >
         Save Monthly Summary
       </button>
 

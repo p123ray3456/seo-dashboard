@@ -123,3 +123,44 @@
   background: #ecfeff;
   color: #0891b2;
 }
+/* ================= HEADER ================= */
+
+.settings-header{
+margin-bottom:20px;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width:768px){
+
+.settings-wrapper{
+max-width:100%;
+}
+
+.settings-grid{
+grid-template-columns:1fr;
+}
+
+.source-grid{
+grid-template-columns:1fr;
+}
+
+.settings-card{
+padding:16px;
+}
+
+}
+
+/* ================= TABLET ================= */
+
+@media (max-width:992px){
+
+.settings-grid{
+grid-template-columns:1fr;
+}
+
+.source-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+}

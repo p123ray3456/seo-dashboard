@@ -64,3 +64,42 @@
   font-size: 12px;
   color: #64748b;
 }
+/* ================= HEADER ================= */
+
+.ms-header{
+margin-bottom:18px;
+}
+
+/* ================= MOBILE RESPONSIVE ================= */
+
+@media (max-width:768px){
+
+.ms-wrapper{
+max-width:100%;
+}
+
+.ms-card{
+padding:18px;
+}
+
+.ms-card p{
+font-size:13px;
+}
+
+.ms-author{
+flex-direction:column;
+align-items:flex-start;
+gap:6px;
+}
+
+}
+
+/* ================= TABLET ================= */
+
+@media (max-width:992px){
+
+.ms-wrapper{
+max-width:100%;
+}
+
+}

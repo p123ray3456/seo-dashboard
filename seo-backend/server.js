@@ -5,7 +5,7 @@ const cors = require("cors");
 const { MongoClient } = require("mongodb");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const teamMembers = require("./routes/teamMembers");
 const seoRoutes = require("./routes/seo.routes");
 
 const app = express();
@@ -40,6 +40,7 @@ async function startServer() {
     /* ================= ROUTES ================= */
 
     app.use("/seo", seoRoutes);
+    app.use("/team-members", teamMembers);
 
     /* ================= CLIENT APIs ================= */
 
@@ -47,7 +48,17 @@ async function startServer() {
       const data = await db.collection("clients").find().toArray();
       res.json(data);
     });
+    
+    app.get("/agency-tasks", async (req,res)=>{
 
+  const tasks = await db
+  .collection("agency_tasks")
+  .find()
+  .toArray();
+
+  res.json(tasks);
+
+});
     app.get("/clients/:id", async (req, res) => {
       const clientData = await db
         .collection("clients")

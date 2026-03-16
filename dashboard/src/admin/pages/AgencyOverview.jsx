@@ -5,6 +5,7 @@ import axios from "axios";
 const AgencyOverview = () => {
 
   const [clients,setClients] = useState([]);
+  const [reports,setReports] = useState([]);
 
   const [stats,setStats] = useState({
     totalClients:0,
@@ -13,6 +14,7 @@ const AgencyOverview = () => {
 
   useEffect(()=>{
     loadAgencyData();
+    loadReports();
   },[]);
 
   const loadAgencyData = async () => {
@@ -41,6 +43,23 @@ const AgencyOverview = () => {
 
   };
 
+  const loadReports = async () =>{
+
+    try{
+
+      const res = await axios.get(
+        "http://localhost:5000/agency-reports"
+      );
+
+      setReports(res.data);
+
+    }
+    catch(err){
+      console.log(err);
+    }
+
+  };
+
   const statCards = [
     {
       title:"Total Clients",
@@ -56,7 +75,7 @@ const AgencyOverview = () => {
     }
   ];
 
-  return (
+  return(
 
     <div className="ao-wrapper">
 
@@ -87,7 +106,7 @@ const AgencyOverview = () => {
 
       </div>
 
-      {/* CLIENT LIST + TASKS */}
+      {/* GRID */}
 
       <div className="ao-grid">
 
@@ -98,6 +117,7 @@ const AgencyOverview = () => {
           <h6>Recent Clients</h6>
 
           {clients.slice(0,5).map((client,i)=>(
+
             <div className="activity-item" key={i}>
 
               <div className="badge">
@@ -115,49 +135,44 @@ const AgencyOverview = () => {
               </div>
 
             </div>
+
           ))}
 
         </div>
 
-        {/* TASKS */}
+        {/* MONTHLY REPORTS */}
 
         <div className="ao-box">
 
-          <h6>Pending Tasks</h6>
+          <h6>Latest Monthly Reports</h6>
 
-          <Task title="Review Technical Audit" priority="high"/>
-          <Task title="Publish SEO Blog" priority="medium"/>
-          <Task title="Check Backlinks" priority="low"/>
+          {reports.length === 0 ? (
+
+            <p className="muted">No reports available</p>
+
+          ) : (
+
+            reports.slice(0,5).map((report,i)=>(
+
+              <div className="report-item" key={i}>
+
+                <strong>{report.month}</strong>
+
+                <p>{report.summary.substring(0,60)}...</p>
+
+                <small>
+                  Client ID: {report.clientId} • By {report.author}
+                </small>
+
+              </div>
+
+            ))
+
+          )}
 
         </div>
 
       </div>
-
-    </div>
-
-  );
-
-};
-
-/* TASK COMPONENT */
-
-const Task = ({title,priority}) =>{
-
-  return(
-
-    <div className={`task-item ${priority}`}>
-
-      <div>
-
-        <input type="checkbox"/>
-
-        <span>{title}</span>
-
-      </div>
-
-      <span className={`priority ${priority}`}>
-        {priority}
-      </span>
 
     </div>
 

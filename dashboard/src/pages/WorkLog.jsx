@@ -25,7 +25,9 @@ const WorkLog = () => {
         setData(result);
 
       } catch (error) {
+
         console.error("WorkLog error:", error);
+
       }
 
     };
@@ -35,7 +37,7 @@ const WorkLog = () => {
   }, [clientId]);
 
   if (!data) {
-    return <div className="worklog-wrapper">Loading...</div>;
+    return <div className="wl-wrapper container-fluid">Loading...</div>;
   }
 
   const logs = data.logs || {
@@ -46,47 +48,57 @@ const WorkLog = () => {
 
   return (
 
-    <div className="worklog-wrapper">
+    <div className="wl-wrapper container-fluid">
 
-      <div className="worklog-header">
-        <h4>SEO Work Log</h4>
-        <p>Tasks completed this month</p>
-      </div>
+      {/* HEADER */}
 
-      <div className="worklog-status">
+      <div className="wl-header">
 
-        <div className="status-card">
-          <small>Monthly Status</small>
-          <h5>{data.status || "No Status"}</h5>
-        </div>
-
-        <div className="status-card">
-          <small>Technical Health</small>
-          <h5>{data.health || 0}%</h5>
+        <div>
+          <h4>SEO Work Log</h4>
+          <p>Tasks completed this month</p>
         </div>
 
       </div>
 
-      {/* ON PAGE TASKS */}
 
-      <TaskSection
-        title="On Page Optimization"
-        tasks={logs.onPage}
-      />
+      {/* STATUS */}
 
-      {/* TECHNICAL TASKS */}
+      <div className="wl-status-box">
 
-      <TaskSection
-        title="Technical SEO"
-        tasks={logs.technical}
-      />
+        <div>
+          <h6>Monthly Status</h6>
+          <p>{data.status || "No Status"}</p>
+        </div>
 
-      {/* OFF PAGE TASKS */}
+        <div>
+          <h6>Technical Health</h6>
+          <p>{data.health || 0}%</p>
+        </div>
 
-      <TaskSection
-        title="Off Page SEO"
-        tasks={logs.offPage}
-      />
+      </div>
+
+
+      {/* TASK GRID */}
+
+      <div className="wl-grid">
+
+        <TaskSection
+          title="On Page Optimization"
+          tasks={logs.onPage}
+        />
+
+        <TaskSection
+          title="Technical SEO"
+          tasks={logs.technical}
+        />
+
+        <TaskSection
+          title="Off Page SEO"
+          tasks={logs.offPage}
+        />
+
+      </div>
 
     </div>
 
@@ -99,20 +111,26 @@ const WorkLog = () => {
 
 const TaskSection = ({ title, tasks }) => (
 
-  <div className="worklog-section">
+  <div className="wl-card">
 
     <h6>{title}</h6>
 
     {(tasks || []).length === 0 ? (
+
       <p className="text-muted">No tasks added</p>
+
     ) : (
 
       <ul>
 
         {tasks.map((task, i) => (
 
-          <li key={i}>
-            {task?.text || "-"}
+          <li className="wl-item" key={i}>
+
+            <div className="wl-dot done"></div>
+
+            <p>{task?.text || "-"}</p>
+
           </li>
 
         ))}

@@ -6,7 +6,6 @@ import axios from "axios";
 const Settings = () => {
 
   const { clientId } = useParams();
-
   const [client,setClient] = useState(null);
 
   useEffect(()=>{
@@ -15,29 +14,46 @@ const Settings = () => {
 
   const loadClient = async () => {
 
-    const res = await axios.get(
-      `http://localhost:5000/clients/${clientId}`
-    );
+    try{
 
-    setClient(res.data);
+      const res = await axios.get(
+        `http://localhost:5000/clients/${clientId}`
+      );
+
+      setClient(res.data);
+
+    }catch(err){
+      console.log(err);
+    }
 
   };
 
   if(!client){
-    return <p>Loading...</p>;
+    return (
+      <div className="settings-wrapper container-fluid">
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div className="settings-wrapper">
+
+    <div className="settings-wrapper container-fluid">
 
       {/* Header */}
 
       <div className="settings-header">
+
         <h4>Account Settings</h4>
-        <p>View your account details and data configuration.</p>
+
+        <p>
+          View your account details and data configuration.
+        </p>
+
       </div>
 
-      {/* Client Profile */}
+
+      {/* CLIENT PROFILE */}
 
       <div className="settings-card">
 
@@ -47,6 +63,7 @@ const Settings = () => {
 
           <div>
             <label>Company Name</label>
+
             <input
               type="text"
               value={client.name}
@@ -56,6 +73,7 @@ const Settings = () => {
 
           <div>
             <label>Website URL</label>
+
             <input
               type="text"
               value={client.domain}
@@ -65,6 +83,7 @@ const Settings = () => {
 
           <div>
             <label>Contact Email</label>
+
             <input
               type="text"
               value={client.email || "Not Available"}
@@ -74,6 +93,7 @@ const Settings = () => {
 
           <div>
             <label>Plan</label>
+
             <input
               type="text"
               value={client.plan || "SEO Plan"}
@@ -85,53 +105,79 @@ const Settings = () => {
 
       </div>
 
-      {/* Data Source Transparency */}
+
+      {/* DATA SOURCE SECTION */}
 
       <div className="settings-card highlight">
 
         <h6>Data Source Transparency</h6>
 
         <p className="settings-desc">
+
           To ensure complete accuracy, your dashboard aggregates data directly
           from the industry’s most trusted official sources.
+
         </p>
 
         <div className="source-grid">
 
           <div className="source-card">
+
             <span className="source-badge ga">GA4</span>
+
             <h6>Traffic & Behavior</h6>
+
             <small>Source: Google Analytics 4</small>
+
             <p>
               Tracks real human visitors from Organic Search traffic.
             </p>
+
           </div>
 
+
           <div className="source-card">
+
             <span className="source-badge gsc">GSC</span>
+
             <h6>Search Performance</h6>
+
             <small>Source: Google Search Console</small>
+
             <p>
               Shows impressions, clicks and keyword performance.
             </p>
+
           </div>
 
+
           <div className="source-card">
+
             <span className="source-badge rank">Rank</span>
+
             <h6>Keyword Rankings</h6>
+
             <small>Source: Rank Tracker</small>
+
             <p>
               Tracks keyword ranking improvements over time.
             </p>
+
           </div>
 
+
           <div className="source-card">
+
             <span className="source-badge audit">Audit</span>
+
             <h6>Work Log & Audit</h6>
+
             <small>Source: Agency SEO Team</small>
+
             <p>
               Verified SEO activities performed by our team.
             </p>
+
           </div>
 
         </div>
@@ -139,6 +185,7 @@ const Settings = () => {
       </div>
 
     </div>
+
   );
 
 };

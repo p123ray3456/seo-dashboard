@@ -16,28 +16,44 @@ const Support = () => {
       return;
     }
 
-    await axios.post("http://localhost:5000/support-message",{
+    try{
 
-      clientId,
-      subject,
-      message
+      await axios.post("http://localhost:5000/support-message",{
+        clientId,
+        subject,
+        message
+      });
 
-    });
+      alert("Message sent to admin");
 
-    alert("Message sent to admin");
+      setSubject("");
+      setMessage("");
 
-    setSubject("");
-    setMessage("");
+    }catch(err){
+
+      console.log(err);
+      alert("Error sending message");
+
+    }
 
   };
 
   return (
 
-    <div className="container">
+    <div className="container-fluid support-wrapper">
 
-      <h4 className="mb-4">Contact Your SEO Manager</h4>
+      <div className="support-header">
 
-      <div className="card p-4">
+        <h4>Contact Your SEO Manager</h4>
+
+        <p className="text-muted">
+          Send a message directly to your SEO team.
+        </p>
+
+      </div>
+
+
+      <div className="card support-card p-4">
 
         <div className="mb-3">
 
@@ -52,6 +68,7 @@ const Support = () => {
 
         </div>
 
+
         <div className="mb-3">
 
           <label className="form-label">Message</label>
@@ -65,7 +82,11 @@ const Support = () => {
 
         </div>
 
-        <button className="btn btn-primary" onClick={sendMessage}>
+
+        <button
+          className="btn btn-primary support-btn"
+          onClick={sendMessage}
+        >
           Send Message
         </button>
 

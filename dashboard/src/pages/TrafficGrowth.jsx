@@ -7,6 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+
 import "../styles/trafficGrowth.css";
 
 const TrafficGrowth = () => {
@@ -58,14 +59,22 @@ const TrafficGrowth = () => {
   /* ================= STATES ================= */
 
   if (loading) {
-    return <div className="tg-wrapper">Loading traffic data...</div>;
+    return (
+      <div className="tg-wrapper container-fluid">
+        Loading traffic data...
+      </div>
+    );
   }
 
   if (!data) {
-    return <div className="tg-wrapper">No data available</div>;
+    return (
+      <div className="tg-wrapper container-fluid">
+        No data available
+      </div>
+    );
   }
 
-  /* ================= FIXED CHART DATA ================= */
+  /* ================= CHART DATA ================= */
 
   const chartData =
     data.chart?.map((row) => ({
@@ -75,18 +84,25 @@ const TrafficGrowth = () => {
 
   return (
 
-    <div className="tg-wrapper">
+    <div className="tg-wrapper container-fluid">
 
       {/* HEADER */}
 
       <div className="tg-header">
 
         <div>
-          <h4>Organic Traffic Growth</h4>
-          <p>Real performance from Google Search Console</p>
+
+          <h4 className="fw-bold">Organic Traffic Growth</h4>
+
+          <p className="text-muted">
+            Real performance from Google Search Console
+          </p>
+
         </div>
 
         <select
+          className="form-select"
+          style={{ maxWidth: "180px" }}
           value={range}
           onChange={(e) => setRange(Number(e.target.value))}
         >
@@ -125,9 +141,9 @@ const TrafficGrowth = () => {
 
       <div className="tg-chart">
 
-        <h6>Daily Click Trend</h6>
+        <h6 className="mb-3">Daily Click Trend</h6>
 
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={280}>
 
           <LineChart data={chartData}>
 
@@ -158,7 +174,7 @@ const TrafficGrowth = () => {
 };
 
 
-/* ================= COMPONENT ================= */
+/* ================= METRIC CARD ================= */
 
 const MetricCard = ({ title, value, color }) => (
 
