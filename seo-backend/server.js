@@ -21,12 +21,9 @@ app.use(cors({
     "http://localhost:5173",
     "https://seo-dashboard-pakjdjkv-p123ray3456s-projects.vercel.app"
   ],
-  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
-  allowedHeaders: ["Content-Type","Authorization"],
-  credentials: true
+  methods: ["GET","POST","PUT","DELETE"],
+  allowedHeaders: ["Content-Type","Authorization"]
 }));
-
-app.options("*", cors());
 
 app.use(express.json());
 
