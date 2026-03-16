@@ -5,14 +5,34 @@ const cors = require("cors");
 const { MongoClient } = require("mongodb");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const rateLimit = require("express-rate-limit");
+
 const teamMembers = require("./routes/teamMembers");
 const seoRoutes = require("./routes/seo.routes");
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-const JWT_SECRET = "dgilab_secret_key";
+/* ========================= */
+/*        RATE LIMIT         */
+/* ========================= */
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200
+});
+
+app.use(limiter);
+
+/* ========================= */
+/*        HEALTH CHECK       */
+/* ========================= */
+
+app.get("/", (req, res) => {
+  res.send("SEO Dashboard API running 🚀");
+});
 
 /* ========================= */
 /*        MONGODB            */
@@ -23,12 +43,15 @@ const client = new MongoClient(uri);
 
 let db;
 
+const JWT_SECRET = "dgilab_secret_key";
+
 /* ========================= */
 /*     START SERVER          */
 /* ========================= */
 
 async function startServer() {
   try {
+
     await client.connect();
 
     db = client.db("seo-dashboard");
@@ -45,63 +68,89 @@ async function startServer() {
     /* ================= CLIENT APIs ================= */
 
     app.get("/clients", async (req, res) => {
-      const data = await db.collection("clients").find().toArray();
+
+      const data = await db
+        .collection("clients")
+        .find()
+        .toArray();
+
       res.json(data);
+
     });
-    
-    app.get("/agency-tasks", async (req,res)=>{
 
-  const tasks = await db
-  .collection("agency_tasks")
-  .find()
-  .toArray();
 
-  res.json(tasks);
-
-});
     app.get("/clients/:id", async (req, res) => {
+
       const clientData = await db
         .collection("clients")
         .findOne({ id: String(req.params.id) });
 
-      if (!clientData)
+      if (!clientData) {
         return res.status(404).json({ message: "Client not found" });
+      }
 
       res.json(clientData);
+
     });
 
+
     app.post("/clients", async (req, res) => {
+
       await db.collection("clients").insertOne(req.body);
 
       res.json({ message: "Client added successfully" });
+
     });
+
 
     app.put("/clients/:id", async (req, res) => {
-      await db
-        .collection("clients")
-        .updateOne({ id: req.params.id }, { $set: req.body });
+
+      await db.collection("clients").updateOne(
+        { id: req.params.id },
+        { $set: req.body }
+      );
 
       res.json({ message: "Client updated" });
+
     });
 
+
     app.delete("/clients/:id", async (req, res) => {
+
       await db.collection("clients").deleteOne({ id: req.params.id });
 
       res.json({ message: "Client deleted" });
+
+    });
+
+    /* ================= AGENCY TASKS ================= */
+
+    app.get("/agency-tasks", async (req, res) => {
+
+      const tasks = await db
+        .collection("agency_tasks")
+        .find()
+        .toArray();
+
+      res.json(tasks);
+
     });
 
     /* ================= AUTH APIs ================= */
 
     app.post("/auth/register", async (req, res) => {
+
       try {
+
         const { email, password, role, clientId } = req.body;
 
         const existingUser = await db
           .collection("users")
           .findOne({ email });
 
-        if (existingUser)
+        if (existingUser) {
           return res.status(400).json({ message: "User already exists" });
+        }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -109,35 +158,43 @@ async function startServer() {
           email,
           password: hashedPassword,
           role,
-          clientId: clientId || null,
+          clientId: clientId || null
         });
 
         res.json({ message: "User registered successfully" });
 
       } catch (error) {
+
         res.status(500).json({ error: error.message });
+
       }
+
     });
 
+
     app.post("/auth/login", async (req, res) => {
+
       try {
+
         const { email, password } = req.body;
 
         const user = await db.collection("users").findOne({ email });
 
-        if (!user)
+        if (!user) {
           return res.status(404).json({ message: "User not found" });
+        }
 
         const match = await bcrypt.compare(password, user.password);
 
-        if (!match)
+        if (!match) {
           return res.status(401).json({ message: "Invalid password" });
+        }
 
         const token = jwt.sign(
           {
             email: user.email,
             role: user.role,
-            clientId: user.clientId,
+            clientId: user.clientId
           },
           JWT_SECRET,
           { expiresIn: "7d" }
@@ -147,153 +204,160 @@ async function startServer() {
           message: "Login success",
           token,
           role: user.role,
-          clientId: user.clientId,
+          clientId: user.clientId
         });
 
       } catch (error) {
+
         res.status(500).json({ error: error.message });
+
       }
+
     });
+
     /* ================= MONTHLY SUMMARY ================= */
 
-// GET summary for client dashboard
-app.get("/monthly-summary/:clientId", async (req, res) => {
-  try {
-    const report = await db
-      .collection("monthly_reports")
-      .findOne({ clientId: req.params.clientId });
+    app.get("/monthly-summary/:clientId", async (req, res) => {
 
-    if (!report) {
-      return res.json(null);
-    }
+      try {
 
-    res.json(report);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+        const report = await db
+          .collection("monthly_reports")
+          .findOne({ clientId: req.params.clientId });
+
+        if (!report) {
+          return res.json(null);
+        }
+
+        res.json(report);
+
+      } catch (error) {
+
+        res.status(500).json({ error: error.message });
+
+      }
+
+    });
 
 
-// SAVE summary from admin panel
-app.post("/monthly-summary", async (req, res) => {
-  try {
+    app.post("/monthly-summary", async (req, res) => {
 
-    const data = req.body;
+      try {
 
-    await db.collection("monthly_reports").updateOne(
-      { clientId: data.clientId },
-      { $set: data },
-      { upsert: true }
-    );
+        const data = req.body;
 
-    res.json({ message: "Monthly summary saved" });
+        await db.collection("monthly_reports").updateOne(
+          { clientId: data.clientId },
+          { $set: data },
+          { upsert: true }
+        );
 
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+        res.json({ message: "Monthly summary saved" });
 
-app.get("/next-month-plan/:clientId", async (req, res) => {
+      } catch (error) {
 
-  const plan = await db
-  .collection("next_month_plans")
-  .findOne({ clientId: req.params.clientId });
+        res.status(500).json({ error: error.message });
 
-  res.json(plan || { roadmap: [] });
+      }
 
-});
-app.post("/next-month-plan", async (req, res) => {
+    });
 
-  const data = req.body;
+    /* ================= NEXT MONTH PLAN ================= */
 
-  await db.collection("next_month_plans").updateOne(
+    app.get("/next-month-plan/:clientId", async (req, res) => {
 
-    { clientId: data.clientId },
+      const plan = await db
+        .collection("next_month_plans")
+        .findOne({ clientId: req.params.clientId });
 
-    { $set: data },
+      res.json(plan || { roadmap: [] });
 
-    { upsert: true }
+    });
 
-  );
 
-  res.json({ message: "Plan saved" });
+    app.post("/next-month-plan", async (req, res) => {
 
-});
+      const data = req.body;
 
-app.get("/admin/settings", async (req, res) => {
+      await db.collection("next_month_plans").updateOne(
+        { clientId: data.clientId },
+        { $set: data },
+        { upsert: true }
+      );
 
-  const settings = await db
-  .collection("agency_settings")
-  .findOne({});
+      res.json({ message: "Plan saved" });
 
-  res.json(settings || {});
+    });
 
-});
+    /* ================= ADMIN SETTINGS ================= */
 
-app.post("/admin/settings", async (req, res) => {
+    app.get("/admin/settings", async (req, res) => {
 
-  const data = req.body;
+      const settings = await db
+        .collection("agency_settings")
+        .findOne({});
 
-  await db.collection("agency_settings").updateOne(
+      res.json(settings || {});
 
-    {},
+    });
 
-    { $set: data },
 
-    { upsert: true }
+    app.post("/admin/settings", async (req, res) => {
 
-  );
+      const data = req.body;
 
-  res.json({ message: "Settings saved" });
+      await db.collection("agency_settings").updateOne(
+        {},
+        { $set: data },
+        { upsert: true }
+      );
 
-});
+      res.json({ message: "Settings saved" });
 
-app.post("/support-message", async (req,res)=>{
+    });
 
-  const data = req.body;
+    /* ================= SUPPORT ================= */
 
-  await db.collection("support_messages").insertOne({
+    app.post("/support-message", async (req, res) => {
 
-    clientId:data.clientId,
-    subject:data.subject,
-    message:data.message,
-    createdAt:new Date()
+      const data = req.body;
 
-  });
+      await db.collection("support_messages").insertOne({
+        clientId: data.clientId,
+        subject: data.subject,
+        message: data.message,
+        createdAt: new Date()
+      });
 
-  res.json({message:"Message saved"});
+      res.json({ message: "Message saved" });
 
-});
+    });
 
-app.get("/support-messages", async (req,res)=>{
 
-  const messages = await db
-  .collection("support_messages")
-  .find()
-  .sort({createdAt:-1})
-  .toArray();
+    app.get("/support-messages", async (req, res) => {
 
-  res.json(messages);
+      const messages = await db
+        .collection("support_messages")
+        .find()
+        .sort({ createdAt: -1 })
+        .toArray();
 
-});
-const rateLimit = require("express-rate-limit");
+      res.json(messages);
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 200
-});
+    });
 
-app.use(limiter);
     /* ================= SERVER ================= */
 
     const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Backend running on port ${PORT}`);
-});
+    app.listen(PORT, () => {
+      console.log(`🚀 Backend running on port ${PORT}`);
+    });
 
   } catch (error) {
+
     console.log("❌ MongoDB Error:", error);
+
   }
 }
 
