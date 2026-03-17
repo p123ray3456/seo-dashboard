@@ -7,19 +7,25 @@ const { google } = require("googleapis");
 ===================================================== */
 
 const getSearchConsoleClient = async () => {
+  try {
+    const credentials = JSON.parse(process.env.SERVICE_ACCOUNT_KEY);
 
-  const auth = new google.auth.GoogleAuth({
-    credentials: credentials,
-    scopes: ["https://www.googleapis.com/auth/webmasters.readonly"],
-  });
+    const auth = new google.auth.GoogleAuth({
+      credentials: credentials,
+      scopes: ["https://www.googleapis.com/auth/webmasters.readonly"],
+    });
 
-  const authClient = await auth.getClient();
+    const authClient = await auth.getClient();
 
-  return google.searchconsole({
-    version: "v1",
-    auth: authClient,
-  });
+    return google.searchconsole({
+      version: "v1",
+      auth: authClient,
+    });
 
+  } catch (error) {
+    console.error("Auth Error:", error.message);
+    throw error;
+  }
 };
 
 /* =====================================================
