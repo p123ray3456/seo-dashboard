@@ -21,16 +21,23 @@ const Overview = () => {
 
   useEffect(() => {
 
+    if (!clientId) return;
+
     fetch(`${API}/clients/${clientId}`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("Client fetch failed");
+        return res.json();
+      })
       .then(data => setClient(data))
-      .catch(err => console.log(err));
+      .catch(err => console.error("❌ CLIENT ERROR:", err));
 
   }, [clientId]);
 
   /* ================= FETCH OVERVIEW ================= */
 
   useEffect(() => {
+
+    if (!clientId) return;
 
     const fetchOverview = async () => {
 
@@ -42,20 +49,31 @@ const Overview = () => {
           `${API}/seo/overview?clientId=${clientId}&range=${range}`
         );
 
+        if (!res.ok) {
+          throw new Error(`Overview fetch failed: ${res.status}`);
+        }
+
         const data = await res.json();
 
-        console.log("OVERVIEW RESPONSE:", data);
+        console.log("✅ OVERVIEW RESPONSE:", data);
 
-        // ✅ SAFE MAPPING (IMPORTANT FIX)
+        // ✅ SAFE MAPPING (CRITICAL FIX)
         setOverviewData({
-          dateRows: data?.dateRows || [],
-          queryRows: data?.queryRows || [],
-          pageRows: data?.pageRows || []
+          dateRows: Array.isArray(data?.dateRows) ? data.dateRows : [],
+          queryRows: Array.isArray(data?.queryRows) ? data.queryRows : [],
+          pageRows: Array.isArray(data?.pageRows) ? data.pageRows : []
         });
 
       } catch (err) {
 
-        console.log(err);
+        console.error("❌ OVERVIEW ERROR:", err);
+
+        // fallback safe state
+        setOverviewData({
+          dateRows: [],
+          queryRows: [],
+          pageRows: []
+        });
 
       } finally {
 
@@ -76,7 +94,7 @@ const Overview = () => {
   let avgCTR = 0;
   let avgPosition = 0;
 
-  const rows = overviewData?.dateRows || [];
+  const rows = overviewData.dateRows;
 
   rows.forEach(row => {
     totalClicks += Number(row.clicks) || 0;
@@ -132,7 +150,10 @@ const Overview = () => {
 
         <div className="d-flex gap-2">
 
-          <select value={range} onChange={(e)=>setRange(e.target.value)}>
+          <select
+            value={range}
+            onChange={(e)=>setRange(Number(e.target.value))}
+          >
             <option value={7}>7 Days</option>
             <option value={30}>30 Days</option>
             <option value={90}>90 Days</option>
@@ -167,7 +188,7 @@ const Overview = () => {
 
           {overviewData.queryRows.length > 0 ? (
             overviewData.queryRows.map((row,i)=>(
-              <div key={i}>{row.keys[0]}</div>
+              <div key={i}>{row.keys?.[0] || "-"}</div>
             ))
           ) : (
             <p>No data</p>
@@ -181,7 +202,7 @@ const Overview = () => {
 
           {overviewData.pageRows.length > 0 ? (
             overviewData.pageRows.map((row,i)=>(
-              <div key={i}>{row.keys[0]}</div>
+              <div key={i}>{row.keys?.[0] || "-"}</div>
             ))
           ) : (
             <p>No data</p>
