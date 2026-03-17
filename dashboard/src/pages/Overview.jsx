@@ -20,74 +20,47 @@ const Overview = () => {
   /* ================= FETCH CLIENT ================= */
 
   useEffect(() => {
-
     if (!clientId) return;
 
     fetch(`${API}/clients/${clientId}`)
-      .then(res => {
-        if (!res.ok) throw new Error("Client fetch failed");
-        return res.json();
-      })
+      .then(res => res.json())
       .then(data => setClient(data))
-      .catch(err => console.error("❌ CLIENT ERROR:", err));
-
+      .catch(err => console.log(err));
   }, [clientId]);
 
   /* ================= FETCH OVERVIEW ================= */
 
   useEffect(() => {
-
     if (!clientId) return;
 
     const fetchOverview = async () => {
-
       try {
-
         setLoading(true);
 
         const res = await fetch(
           `${API}/seo/overview?clientId=${clientId}&range=${range}`
         );
 
-        if (!res.ok) {
-          throw new Error(`Overview fetch failed: ${res.status}`);
-        }
-
         const data = await res.json();
 
-        console.log("✅ OVERVIEW RESPONSE:", data);
-
-        // ✅ SAFE MAPPING (CRITICAL FIX)
         setOverviewData({
-          dateRows: Array.isArray(data?.dateRows) ? data.dateRows : [],
-          queryRows: Array.isArray(data?.queryRows) ? data.queryRows : [],
-          pageRows: Array.isArray(data?.pageRows) ? data.pageRows : []
+          dateRows: data?.dateRows || [],
+          queryRows: data?.queryRows || [],
+          pageRows: data?.pageRows || []
         });
 
       } catch (err) {
-
-        console.error("❌ OVERVIEW ERROR:", err);
-
-        // fallback safe state
-        setOverviewData({
-          dateRows: [],
-          queryRows: [],
-          pageRows: []
-        });
-
+        console.log(err);
       } finally {
-
         setLoading(false);
-
       }
-
     };
 
     fetchOverview();
 
   }, [clientId, range]);
 
-  /* ================= KPI CALCULATION ================= */
+  /* ================= KPI ================= */
 
   let totalClicks = 0;
   let totalImpressions = 0;
@@ -111,13 +84,9 @@ const Overview = () => {
   /* ================= PDF ================= */
 
   const downloadPDF = () => {
-
     const pdf = new jsPDF();
 
-    pdf.setFontSize(20);
     pdf.text("SEO Report", 20, 30);
-
-    pdf.setFontSize(12);
     pdf.text(`Client: ${client?.name || "-"}`, 20, 50);
     pdf.text(`Website: ${client?.domain || "-"}`, 20, 60);
     pdf.text(`Range: Last ${range} Days`, 20, 70);
@@ -130,27 +99,25 @@ const Overview = () => {
     pdf.text(`Position: ${avgPosition}`, 20, 60);
 
     pdf.save("report.pdf");
-
   };
 
-  /* ================= UI ================= */
-
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="text-center mt-5">Loading...</div>;
 
   return (
+    <div className="container-fluid px-3 px-md-4">
 
-    <div className="container-fluid">
-
-      <div className="d-flex justify-content-between mb-4">
+      {/* HEADER */}
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
 
         <div>
-          <h4>Dashboard Overview</h4>
-          <p>Google Search Console Data</p>
+          <h4 className="mb-1">Dashboard Overview</h4>
+          <p className="text-muted mb-0">Google Search Console Data</p>
         </div>
 
-        <div className="d-flex gap-2">
+        <div className="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto">
 
           <select
+            className="form-select"
             value={range}
             onChange={(e)=>setRange(Number(e.target.value))}
           >
@@ -159,7 +126,7 @@ const Overview = () => {
             <option value={90}>90 Days</option>
           </select>
 
-          <button onClick={downloadPDF}>
+          <button className="btn btn-primary w-100" onClick={downloadPDF}>
             Download
           </button>
 
@@ -167,9 +134,8 @@ const Overview = () => {
 
       </div>
 
-      {/* KPI */}
-
-      <div className="row">
+      {/* KPI CARDS */}
+      <div className="row g-3">
 
         <Card title="Clicks" value={totalClicks} />
         <Card title="Impressions" value={totalImpressions} />
@@ -178,59 +144,52 @@ const Overview = () => {
 
       </div>
 
-      {/* QUERY */}
+      {/* DATA */}
+      <div className="row mt-4 g-3">
 
-      <div className="row mt-4">
+        <div className="col-12 col-md-6">
+          <div className="card p-3 h-100">
+            <h5>Top Queries</h5>
 
-        <div className="col-md-6">
-
-          <h5>Top Queries</h5>
-
-          {overviewData.queryRows.length > 0 ? (
-            overviewData.queryRows.map((row,i)=>(
-              <div key={i}>{row.keys?.[0] || "-"}</div>
-            ))
-          ) : (
-            <p>No data</p>
-          )}
-
+            {overviewData.queryRows.length > 0 ? (
+              overviewData.queryRows.map((row,i)=>(
+                <div key={i} className="text-truncate">
+                  {row.keys?.[0] || "-"}
+                </div>
+              ))
+            ) : <p>No data</p>}
+          </div>
         </div>
 
-        <div className="col-md-6">
+        <div className="col-12 col-md-6">
+          <div className="card p-3 h-100">
+            <h5>Top Pages</h5>
 
-          <h5>Top Pages</h5>
-
-          {overviewData.pageRows.length > 0 ? (
-            overviewData.pageRows.map((row,i)=>(
-              <div key={i}>{row.keys?.[0] || "-"}</div>
-            ))
-          ) : (
-            <p>No data</p>
-          )}
-
+            {overviewData.pageRows.length > 0 ? (
+              overviewData.pageRows.map((row,i)=>(
+                <div key={i} className="text-truncate">
+                  {row.keys?.[0] || "-"}
+                </div>
+              ))
+            ) : <p>No data</p>}
+          </div>
         </div>
 
       </div>
 
     </div>
-
   );
-
 };
 
+/* ================= CARD ================= */
+
 const Card = ({ title, value }) => (
-
-  <div className="col-md-3">
-
-    <div className="card p-3">
-
-      <h6>{title}</h6>
-      <h3>{value !== undefined ? value : "-"}</h3>
-
+  <div className="col-12 col-sm-6 col-md-3">
+    <div className="card p-3 h-100 text-center">
+      <h6 className="text-muted">{title}</h6>
+      <h3>{value ?? "-"}</h3>
     </div>
-
   </div>
-
 );
 
 export default Overview;
