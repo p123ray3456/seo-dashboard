@@ -10,7 +10,11 @@ const Overview = () => {
 
   const [range, setRange] = useState(30);
   const [client, setClient] = useState(null);
-  const [overviewData, setOverviewData] = useState(null);
+  const [overviewData, setOverviewData] = useState({
+    dateRows: [],
+    queryRows: [],
+    pageRows: []
+  });
   const [loading, setLoading] = useState(true);
 
   /* ================= FETCH CLIENT ================= */
@@ -40,9 +44,14 @@ const Overview = () => {
 
         const data = await res.json();
 
-        console.log("Overview Data:", data); // DEBUG
+        console.log("OVERVIEW RESPONSE:", data);
 
-        setOverviewData(data);
+        // ✅ SAFE MAPPING (IMPORTANT FIX)
+        setOverviewData({
+          dateRows: data?.dateRows || [],
+          queryRows: data?.queryRows || [],
+          pageRows: data?.pageRows || []
+        });
 
       } catch (err) {
 
@@ -67,180 +76,116 @@ const Overview = () => {
   let avgCTR = 0;
   let avgPosition = 0;
 
-  if (overviewData && Array.isArray(overviewData.dateRows)) {
+  const rows = overviewData?.dateRows || [];
 
-    overviewData.dateRows.forEach(row => {
-      totalClicks += Number(row.clicks) || 0;
-      totalImpressions += Number(row.impressions) || 0;
-      avgCTR += Number(row.ctr) || 0;
-      avgPosition += Number(row.position) || 0;
-    });
+  rows.forEach(row => {
+    totalClicks += Number(row.clicks) || 0;
+    totalImpressions += Number(row.impressions) || 0;
+    avgCTR += Number(row.ctr) || 0;
+    avgPosition += Number(row.position) || 0;
+  });
 
-    if (overviewData.dateRows.length > 0) {
-      avgCTR = ((avgCTR / overviewData.dateRows.length) * 100).toFixed(2);
-      avgPosition = (avgPosition / overviewData.dateRows.length).toFixed(1);
-    }
-
+  if (rows.length > 0) {
+    avgCTR = ((avgCTR / rows.length) * 100).toFixed(2);
+    avgPosition = (avgPosition / rows.length).toFixed(1);
   }
 
-  /* ================= PDF REPORT ================= */
+  /* ================= PDF ================= */
 
   const downloadPDF = () => {
 
     const pdf = new jsPDF();
 
-    pdf.setFontSize(22);
-    pdf.text("SEO Performance Report", 20, 30);
+    pdf.setFontSize(20);
+    pdf.text("SEO Report", 20, 30);
 
     pdf.setFontSize(12);
-    pdf.text(`Client: ${client?.name || "Client"}`, 20, 50);
+    pdf.text(`Client: ${client?.name || "-"}`, 20, 50);
     pdf.text(`Website: ${client?.domain || "-"}`, 20, 60);
-    pdf.text(`Date Range: Last ${range} Days`, 20, 70);
+    pdf.text(`Range: Last ${range} Days`, 20, 70);
 
     pdf.addPage();
 
-    pdf.setFontSize(18);
-    pdf.text("SEO Performance Metrics", 20, 30);
+    pdf.text(`Clicks: ${totalClicks}`, 20, 30);
+    pdf.text(`Impressions: ${totalImpressions}`, 20, 40);
+    pdf.text(`CTR: ${avgCTR}%`, 20, 50);
+    pdf.text(`Position: ${avgPosition}`, 20, 60);
 
-    pdf.setFontSize(12);
-    pdf.text(`Total Clicks: ${totalClicks}`, 20, 50);
-    pdf.text(`Total Impressions: ${totalImpressions}`, 20, 60);
-    pdf.text(`Average CTR: ${avgCTR}%`, 20, 70);
-    pdf.text(`Average Position: ${avgPosition}`, 20, 80);
-
-    pdf.addPage();
-
-    pdf.setFontSize(18);
-    pdf.text("Top Search Queries", 20, 30);
-
-    let y = 50;
-
-    overviewData?.queryRows?.slice(0,10).forEach((row,index)=>{
-      pdf.setFontSize(12);
-      pdf.text(`${index+1}. ${row.keys[0]}`,20,y);
-      y += 10;
-    });
-
-    pdf.addPage();
-
-    pdf.setFontSize(18);
-    pdf.text("Top Ranking Pages",20,30);
-
-    let pageY = 50;
-
-    overviewData?.pageRows?.slice(0,10).forEach((row,index)=>{
-      pdf.setFontSize(12);
-      pdf.text(`${index+1}. ${row.keys[0]}`,20,pageY);
-      pageY += 10;
-    });
-
-    pdf.save("SEO_Report.pdf");
+    pdf.save("report.pdf");
 
   };
 
-  /* ================= LOADING ================= */
-
-  if (loading) return <div>Loading Overview...</div>;
-
-  if (!overviewData) return <div>No Data Found</div>;
-
   /* ================= UI ================= */
+
+  if (loading) return <div>Loading...</div>;
 
   return (
 
     <div className="container-fluid">
 
-      {/* HEADER */}
-
-      <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div className="d-flex justify-content-between mb-4">
 
         <div>
-          <h4 className="fw-bold mb-1">Dashboard Overview</h4>
-          <p className="text-muted mb-0">
-            Real-time performance from Google Search Console.
-          </p>
+          <h4>Dashboard Overview</h4>
+          <p>Google Search Console Data</p>
         </div>
 
         <div className="d-flex gap-2">
 
-          <select
-            className="form-select"
-            style={{ maxWidth: "180px" }}
-            value={range}
-            onChange={(e) => setRange(Number(e.target.value))}
-          >
-            <option value={7}>Last 7 Days</option>
-            <option value={30}>Last 30 Days</option>
-            <option value={90}>Last 90 Days</option>
+          <select value={range} onChange={(e)=>setRange(e.target.value)}>
+            <option value={7}>7 Days</option>
+            <option value={30}>30 Days</option>
+            <option value={90}>90 Days</option>
           </select>
 
-          <button
-            className="btn btn-primary"
-            onClick={downloadPDF}
-          >
-            Download Report
+          <button onClick={downloadPDF}>
+            Download
           </button>
 
         </div>
 
       </div>
 
-      {/* KPI CARDS */}
+      {/* KPI */}
 
-      <div className="row g-4">
+      <div className="row">
 
-        <Card title="Total Clicks" value={totalClicks} growth="From Google Search" />
-        <Card title="Total Impressions" value={totalImpressions} growth="Search Visibility" />
-        <Card title="Average CTR" value={`${avgCTR}%`} growth="Click Performance" />
-        <Card title="Average Position" value={avgPosition} growth="Ranking Position" />
+        <Card title="Clicks" value={totalClicks} />
+        <Card title="Impressions" value={totalImpressions} />
+        <Card title="CTR" value={`${avgCTR}%`} />
+        <Card title="Position" value={avgPosition} />
 
       </div>
 
-      {/* TABLES */}
+      {/* QUERY */}
 
-      <div className="row mt-4 g-4">
+      <div className="row mt-4">
 
-        <div className="col-lg-6 col-12">
+        <div className="col-md-6">
 
-          <div className="card border-0 shadow-sm p-4 h-100">
+          <h5>Top Queries</h5>
 
-            <h5 className="fw-bold mb-3">Top Search Queries</h5>
-
-            {overviewData?.queryRows?.length ? (
-
-              overviewData.queryRows.map((row, i) => (
-                <div key={i} className="border-bottom py-2">
-                  {row.keys[0]}
-                </div>
-              ))
-
-            ) : (
-              <div className="text-muted">No Query Data</div>
-            )}
-
-          </div>
+          {overviewData.queryRows.length > 0 ? (
+            overviewData.queryRows.map((row,i)=>(
+              <div key={i}>{row.keys[0]}</div>
+            ))
+          ) : (
+            <p>No data</p>
+          )}
 
         </div>
 
-        <div className="col-lg-6 col-12">
+        <div className="col-md-6">
 
-          <div className="card border-0 shadow-sm p-4 h-100">
+          <h5>Top Pages</h5>
 
-            <h5 className="fw-bold mb-3">Top Pages</h5>
-
-            {overviewData?.pageRows?.length ? (
-
-              overviewData.pageRows.map((row, i) => (
-                <div key={i} className="border-bottom py-2">
-                  {row.keys[0]}
-                </div>
-              ))
-
-            ) : (
-              <div className="text-muted">No Page Data</div>
-            )}
-
-          </div>
+          {overviewData.pageRows.length > 0 ? (
+            overviewData.pageRows.map((row,i)=>(
+              <div key={i}>{row.keys[0]}</div>
+            ))
+          ) : (
+            <p>No data</p>
+          )}
 
         </div>
 
@@ -252,29 +197,14 @@ const Overview = () => {
 
 };
 
-/* ================= CARD ================= */
+const Card = ({ title, value }) => (
 
-const Card = ({ title, value, growth }) => (
+  <div className="col-md-3">
 
-  <div className="col-xl-3 col-md-6 col-12">
+    <div className="card p-3">
 
-    <div className="card border-0 shadow-sm p-4 h-100">
-
-      <h6 className="text-muted mb-2">{title}</h6>
-
-      <div className="d-flex justify-content-between align-items-center">
-
-        <h3 className="fw-bold mb-0">
-          {value !== undefined && value !== null ? value : "-"}
-        </h3>
-
-        <div style={{ background: "#f1f4ff", padding: "8px", borderRadius: "10px" }}>
-          📊
-        </div>
-
-      </div>
-
-      <small className="text-muted mt-2">{growth}</small>
+      <h6>{title}</h6>
+      <h3>{value !== undefined ? value : "-"}</h3>
 
     </div>
 
