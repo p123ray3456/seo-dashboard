@@ -9,7 +9,7 @@ const { google } = require("googleapis");
 const getSearchConsoleClient = async () => {
 
   const auth = new google.auth.GoogleAuth({
-    keyFile: "../../service-account.json",
+    credentials: credentials,
     scopes: ["https://www.googleapis.com/auth/webmasters.readonly"],
   });
 
