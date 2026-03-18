@@ -17,8 +17,6 @@ const Overview = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  /* ================= FETCH CLIENT ================= */
-
   useEffect(() => {
     if (!clientId) return;
 
@@ -27,8 +25,6 @@ const Overview = () => {
       .then(data => setClient(data))
       .catch(err => console.log(err));
   }, [clientId]);
-
-  /* ================= FETCH OVERVIEW ================= */
 
   useEffect(() => {
     if (!clientId) return;
@@ -60,8 +56,6 @@ const Overview = () => {
 
   }, [clientId, range]);
 
-  /* ================= KPI ================= */
-
   let totalClicks = 0;
   let totalImpressions = 0;
   let avgCTR = 0;
@@ -81,24 +75,91 @@ const Overview = () => {
     avgPosition = (avgPosition / rows.length).toFixed(1);
   }
 
-  /* ================= PDF ================= */
-
   const downloadPDF = () => {
     const pdf = new jsPDF();
+    let y = 20;
+    const pageWidth = pdf.internal.pageSize.getWidth();
 
-    pdf.text("SEO Report", 20, 30);
-    pdf.text(`Client: ${client?.name || "-"}`, 20, 50);
-    pdf.text(`Website: ${client?.domain || "-"}`, 20, 60);
-    pdf.text(`Range: Last ${range} Days`, 20, 70);
+    const checkPageBreak = () => {
+      if (y > 270) {
+        pdf.addPage();
+        y = 20;
+      }
+    };
 
-    pdf.addPage();
+    pdf.setFontSize(18);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("SEO Performance Report", pageWidth / 2, y, { align: "center" });
+    y += 12;
 
-    pdf.text(`Clicks: ${totalClicks}`, 20, 30);
-    pdf.text(`Impressions: ${totalImpressions}`, 20, 40);
-    pdf.text(`CTR: ${avgCTR}%`, 20, 50);
-    pdf.text(`Position: ${avgPosition}`, 20, 60);
+    pdf.setFontSize(11);
+    pdf.setFont("helvetica", "normal");
+    pdf.text("Generated from SEO Dashboard", pageWidth / 2, y, { align: "center" });
+    y += 15;
 
-    pdf.save("report.pdf");
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Client Information", 14, y);
+    y += 8;
+
+    pdf.setFont("helvetica", "normal");
+    pdf.text(`Client: ${client?.name || "-"}`, 14, y);
+    y += 7;
+    pdf.text(`Website: ${client?.domain || "-"}`, 14, y);
+    y += 7;
+    pdf.text(`Range: Last ${range} Days`, 14, y);
+    y += 12;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Performance Summary", 14, y);
+    y += 8;
+
+    pdf.setFont("helvetica", "normal");
+    pdf.text(`Clicks: ${totalClicks}`, 14, y);
+    y += 7;
+    pdf.text(`Impressions: ${totalImpressions}`, 14, y);
+    y += 7;
+    pdf.text(`CTR: ${avgCTR}%`, 14, y);
+    y += 7;
+    pdf.text(`Position: ${avgPosition}`, 14, y);
+    y += 12;
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Top Queries", 14, y);
+    y += 8;
+
+    overviewData.queryRows.forEach((row, index) => {
+      checkPageBreak();
+      const query = row.keys?.[0] || "-";
+
+      pdf.setFont("helvetica", "bold");
+      pdf.text(`${index + 1}. ${query}`, 14, y);
+      y += 6;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.text(`Clicks: ${row.clicks ?? 0} | Impressions: ${row.impressions ?? 0}`, 18, y);
+      y += 8;
+    });
+
+    checkPageBreak();
+
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Top Pages", 14, y);
+    y += 8;
+
+    overviewData.pageRows.forEach((row, index) => {
+      checkPageBreak();
+      const page = row.keys?.[0] || "-";
+
+      pdf.setFont("helvetica", "bold");
+      pdf.text(`${index + 1}. ${page}`, 14, y);
+      y += 6;
+
+      pdf.setFont("helvetica", "normal");
+      pdf.text(`Clicks: ${row.clicks ?? 0} | Impressions: ${row.impressions ?? 0}`, 18, y);
+      y += 8;
+    });
+
+    pdf.save("SEO_Report.pdf");
   };
 
   if (loading) return <div className="text-center mt-5">Loading...</div>;
@@ -107,17 +168,17 @@ const Overview = () => {
     <div className="container-fluid px-3 px-md-4">
 
       {/* HEADER */}
-      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+      <div className="top-header mb-4">
 
         <div>
-          <h4 className="mb-1">Dashboard Overview</h4>
-          <p className="text-muted mb-0">Google Search Console Data</p>
+          <h3 className="main-title">📊 Dashboard Overview</h3>
+          <p className="subtitle">Track your SEO performance</p>
         </div>
 
-        <div className="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto">
+        <div className="top-actions">
 
           <select
-            className="form-select"
+            className="range-select"
             value={range}
             onChange={(e)=>setRange(Number(e.target.value))}
           >
@@ -126,68 +187,128 @@ const Overview = () => {
             <option value={90}>90 Days</option>
           </select>
 
-          <button className="btn btn-primary w-100" onClick={downloadPDF}>
-            Download
+          <button className="download-btn" onClick={downloadPDF}>
+            ⬇ Download
           </button>
 
         </div>
 
       </div>
 
-      {/* KPI CARDS */}
+      {/* KPI */}
       <div className="row g-3">
-
-        <Card title="Clicks" value={totalClicks} />
-        <Card title="Impressions" value={totalImpressions} />
-        <Card title="CTR" value={`${avgCTR}%`} />
-        <Card title="Position" value={avgPosition} />
-
+        <Card title="Clicks" value={totalClicks} icon="👆"/>
+        <Card title="Impressions" value={totalImpressions} icon="👁"/>
+        <Card title="CTR" value={`${avgCTR}%`} icon="📈"/>
+        <Card title="Position" value={avgPosition} icon="🎯"/>
       </div>
 
       {/* DATA */}
       <div className="row mt-4 g-3">
 
-        <div className="col-12 col-md-6">
-          <div className="card p-3 h-100">
-            <h5>Top Queries</h5>
+        <div className="col-md-6">
+          <div className="card p-3 shadow-sm custom-card">
+            <h5 className="mb-3">🔍 Top Queries</h5>
 
-            {overviewData.queryRows.length > 0 ? (
-              overviewData.queryRows.map((row,i)=>(
-                <div key={i} className="text-truncate">
-                  {row.keys?.[0] || "-"}
-                </div>
-              ))
-            ) : <p>No data</p>}
+            {overviewData.queryRows.map((row,i)=>(
+              <div key={i} className="data-row">
+                <span className="icon">🔍</span>
+                <span className="text-truncate">{row.keys?.[0]}</span>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="col-12 col-md-6">
-          <div className="card p-3 h-100">
-            <h5>Top Pages</h5>
+        <div className="col-md-6">
+          <div className="card p-3 shadow-sm custom-card">
+            <h5 className="mb-3">📄 Top Pages</h5>
 
-            {overviewData.pageRows.length > 0 ? (
-              overviewData.pageRows.map((row,i)=>(
-                <div key={i} className="text-truncate">
-                  {row.keys?.[0] || "-"}
-                </div>
-              ))
-            ) : <p>No data</p>}
+            {overviewData.pageRows.map((row,i)=>(
+              <div key={i} className="data-row">
+                <span className="icon">📄</span>
+                <span className="text-truncate">{row.keys?.[0]}</span>
+              </div>
+            ))}
           </div>
         </div>
 
       </div>
 
+      {/* STYLE */}
+      <style>{`
+        .top-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 15px;
+        }
+
+        .main-title {
+          font-weight: 700;
+        }
+
+        .subtitle {
+          font-size: 14px;
+          color: #6c757d;
+        }
+
+        .top-actions {
+          display: flex;
+          gap: 10px;
+          flex-wrap: nowrap;
+        }
+
+        .range-select {
+          padding: 10px 14px;
+          border-radius: 10px;
+          border: 1px solid #ddd;
+          min-width: 120px;
+        }
+
+        .download-btn {
+          padding: 10px 16px;
+          border-radius: 10px;
+          border: none;
+          background: #0d6efd;
+          color: white;
+          font-weight: 500;
+          white-space: nowrap;
+        }
+
+        .download-btn:hover {
+          background: #0b5ed7;
+        }
+
+        .custom-card {
+          border-radius: 12px;
+        }
+
+        .data-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 8px 0;
+          border-bottom: 1px solid #eee;
+        }
+
+        .icon {
+          font-size: 16px;
+        }
+
+      `}</style>
+
     </div>
   );
 };
 
-/* ================= CARD ================= */
-
-const Card = ({ title, value }) => (
-  <div className="col-12 col-sm-6 col-md-3">
-    <div className="card p-3 h-100 text-center">
-      <h6 className="text-muted">{title}</h6>
-      <h3>{value ?? "-"}</h3>
+/* CARD */
+const Card = ({ title, value, icon }) => (
+  <div className="col-md-3">
+    <div className="card p-3 text-center shadow-sm custom-card">
+      <div style={{ fontSize: "22px" }}>{icon}</div>
+      <h6 className="text-muted mt-2">{title}</h6>
+      <h4 className="fw-bold">{value}</h4>
     </div>
   </div>
 );
