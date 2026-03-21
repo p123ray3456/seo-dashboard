@@ -1,8 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-const API = "https://seo-dashboard-production-ec44.up.railway.app"; 
-
 /* =====================================================
    MAIN COMPONENT
 ===================================================== */
@@ -10,7 +8,8 @@ const API = "https://seo-dashboard-production-ec44.up.railway.app";
 const ClientAdminSettings = () => {
 
   const { clientId } = useParams();
-  const [tab, setTab] = useState("worklog");
+
+  const [tab,setTab] = useState("worklog");
 
   return (
 
@@ -42,6 +41,7 @@ const ClientAdminSettings = () => {
       </div>
 
       {tab==="worklog" && <WorkLogManager clientId={clientId}/>}
+
       {tab==="leads" && <LeadsManager clientId={clientId}/>}
 
     </div>
@@ -55,12 +55,14 @@ export default ClientAdminSettings;
 
 
 /* =====================================================
-   WORK LOG MANAGER (FIXED)
+   WORK LOG MANAGER
 ===================================================== */
 
 const WorkLogManager = ({ clientId }) => {
 
-  const [date, setDate] = useState(getToday());
+  const [month, setMonth] = useState(getCurrentMonth());
+  const [status, setStatus] = useState("");
+  const [health, setHealth] = useState(100);
 
   const [logs, setLogs] = useState({
     onPage: [],
@@ -68,191 +70,157 @@ const WorkLogManager = ({ clientId }) => {
     offPage: [],
   });
 
-  const [loading, setLoading] = useState(false);
-
-  /* ================= CHECKLIST ================= */
-
-  const checklist = {
-    onPage: [
-      "Meta tags optimized",
-      "Content updated",
-      "Internal linking",
-      "Keyword optimization"
-    ],
-    technical: [
-      "Sitemap updated",
-      "Page speed improved",
-      "Mobile optimization",
-      "Schema implemented"
-    ],
-    offPage: [
-      "Backlinks created",
-      "Directory submission",
-      "Guest posting",
-      "Social bookmarking"
-    ]
-  };
-
-  /* ================= LOAD ================= */
-
   useEffect(() => {
     if (clientId) loadData();
-  }, [clientId, date]);
+  }, [month, clientId]);
 
   const loadData = async () => {
 
     try {
 
-      setLoading(true);
-
       const res = await fetch(
-        `${API}/worklog/${clientId}?date=${date}`
+        `https://seo-dashboard-production-ec44.up.railway.app/seo/work-log?clientId=${clientId}&month=${month}`
       );
 
       const data = await res.json();
 
+      setStatus(data?.status || "");
+      setHealth(data?.health || 0);
+
       setLogs({
-        onPage: data?.onPage || [],
-        technical: data?.technical || [],
-        offPage: data?.offPage || [],
+        onPage: data?.logs?.onPage || [],
+        technical: data?.logs?.technical || [],
+        offPage: data?.logs?.offPage || [],
       });
 
-    } catch (err) {
-      console.log("Load Error", err);
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error("WorkLog Load Error:", error);
     }
 
   };
 
-  /* ================= CHECKBOX ================= */
+  const handleAddTask = (type) => {
 
-  const handleCheckbox = (type, task) => {
+    setLogs(prev => ({
+      ...prev,
+      [type]: [...(prev[type] || []), { text: "" }]
+    }));
+
+  };
+
+  const handleChange = (type,index,value) => {
 
     setLogs(prev => {
 
-      const exists = prev[type].includes(task);
+      const updated = { ...prev };
 
-      return {
-        ...prev,
-        [type]: exists
-          ? prev[type].filter(t => t !== task)
-          : [...prev[type], task]
+      if (!updated[type]) updated[type] = [];
+
+      if (!updated[type][index]) updated[type][index] = { text: "" };
+
+      updated[type][index] = {
+        ...updated[type][index],
+        text:value
       };
+
+      return updated;
 
     });
 
   };
 
-  /* ================= SAVE ================= */
-
   const saveWorkLog = async () => {
 
-    try {
+    await fetch("https://seo-dashboard-production-ec44.up.railway.app/seo/work-log",{
 
-      const res = await fetch(`${API}/worklog`, {
+      method:"POST",
 
-        method: "POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
 
-        headers: {
-          "Content-Type": "application/json"
-        },
+      body:JSON.stringify({
+        clientId,
+        month,
+        status,
+        health,
+        logs
+      })
 
-        body: JSON.stringify({
-          clientId: String(clientId),
-          date: date, // ✅ correct format YYYY-MM-DD
-          onPage: logs.onPage,
-          technical: logs.technical,
-          offPage: logs.offPage
-        })
+    });
 
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        throw new Error(result.message || "Save failed");
-      }
-
-      alert("✅ Daily Work Saved Successfully");
-
-    } catch (err) {
-
-      console.log("SAVE ERROR:", err);
-      alert("❌ Error saving work log");
-
-    }
+    alert("Work Log Saved Successfully!");
 
   };
-
-  /* ================= UI ================= */
-
-  if (loading) return <div>Loading...</div>;
 
   return(
 
     <div className="card p-4 shadow-sm">
 
-      <h5 className="fw-bold mb-3">📅 Daily Work Checklist</h5>
+      <h5 className="fw-bold mb-3">Work Log Manager</h5>
 
-      {/* DATE */}
       <div className="mb-3">
-        <label>Select Date</label>
-
+        <label>Month</label>
         <input
-          type="date"
+          type="month"
           className="form-control"
-          value={date}
-          onChange={(e)=>setDate(e.target.value)}
+          value={month}
+          onChange={(e)=>setMonth(e.target.value)}
+        />
+      </div>
+
+      <div className="mb-3">
+        <label>Monthly Status</label>
+        <input
+          className="form-control"
+          value={status}
+          onChange={(e)=>setStatus(e.target.value)}
+        />
+      </div>
+
+      <div className="mb-3">
+        <label>Technical Health (%)</label>
+        <input
+          type="number"
+          className="form-control"
+          value={health}
+          onChange={(e)=>setHealth(Number(e.target.value))}
         />
       </div>
 
       <hr/>
 
       {["onPage","technical","offPage"].map(section=>(
-
         <div key={section} className="mb-4">
 
           <h6 className="fw-bold text-capitalize">
             {section} Tasks
           </h6>
 
-          <div className="row">
+          {(logs[section]||[]).map((task,i)=>(
+            <input
+              key={i}
+              className="form-control mb-2"
+              value={task?.text||""}
+              onChange={(e)=>handleChange(section,i,e.target.value)}
+            />
+          ))}
 
-            {checklist[section].map((task,i)=>(
-
-              <div key={i} className="col-md-6">
-
-                <div className="form-check mb-2">
-
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    checked={logs[section].includes(task)}
-                    onChange={()=>handleCheckbox(section,task)}
-                  />
-
-                  <label className="form-check-label">
-                    {task}
-                  </label>
-
-                </div>
-
-              </div>
-
-            ))}
-
-          </div>
+          <button
+            className="btn btn-sm btn-outline-primary"
+            onClick={()=>handleAddTask(section)}
+          >
+            + Add Task
+          </button>
 
         </div>
-
       ))}
 
       <button
-        className="btn btn-primary mt-3 w-100"
+        className="btn btn-primary mt-3"
         onClick={saveWorkLog}
       >
-        Save Daily Work
+        Save Work Log
       </button>
 
     </div>
@@ -264,7 +232,7 @@ const WorkLogManager = ({ clientId }) => {
 
 
 /* =====================================================
-   LEADS MANAGER (UNCHANGED)
+   LEADS MANAGER
 ===================================================== */
 
 const LeadsManager = ({clientId}) => {
@@ -281,7 +249,7 @@ const LeadsManager = ({clientId}) => {
 
   const saveLeads = async () => {
 
-    await fetch(`${API}/seo/leads`,{
+    await fetch("https://seo-dashboard-production-ec44.up.railway.app/seo/leads",{
 
       method:"POST",
 
@@ -348,7 +316,6 @@ const LeadsManager = ({clientId}) => {
       <h6>Source Breakdown</h6>
 
       {sources.map((src,i)=>(
-
         <div key={i} className="mb-2">
 
           <label>{src.source}</label>
@@ -367,7 +334,6 @@ const LeadsManager = ({clientId}) => {
           />
 
         </div>
-
       ))}
 
       <button
@@ -390,9 +356,9 @@ const LeadsManager = ({clientId}) => {
 ===================================================== */
 
 function getCurrentMonth(){
-  return new Date().toISOString().slice(0,7);
-}
 
-function getToday(){
-  return new Date().toISOString().split("T")[0];
+  const date=new Date();
+
+  return date.toISOString().slice(0,7);
+
 }

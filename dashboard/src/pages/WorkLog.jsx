@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../styles/workLog.css";
 
-const API = "https://seo-dashboard-production-ec44.up.railway.app";
-
 const WorkLog = () => {
 
   const { clientId } = useParams();
-  const [data, setData] = useState([]);
+
+  const [data, setData] = useState(null);
+
+  const month = new Date().toISOString().slice(0, 7);
 
   useEffect(() => {
 
@@ -16,7 +17,7 @@ const WorkLog = () => {
       try {
 
         const res = await fetch(
-          `${API}/worklog-history/${clientId}`
+          `https://seo-dashboard-production-ec44.up.railway.app/seo/work-log?clientId=${clientId}&month=${month}`
         );
 
         const result = await res.json();
@@ -24,7 +25,9 @@ const WorkLog = () => {
         setData(result);
 
       } catch (error) {
+
         console.error("WorkLog error:", error);
+
       }
 
     };
@@ -33,59 +36,69 @@ const WorkLog = () => {
 
   }, [clientId]);
 
-  if (!data || data.length === 0) {
-    return (
-      <div className="wl-wrapper container-fluid">
-        No work data available
-      </div>
-    );
+  if (!data) {
+    return <div className="wl-wrapper container-fluid">Loading...</div>;
   }
+
+  const logs = data.logs || {
+    onPage: [],
+    technical: [],
+    offPage: [],
+  };
 
   return (
 
     <div className="wl-wrapper container-fluid">
 
       {/* HEADER */}
+
       <div className="wl-header">
+
         <div>
-          <h4>SEO Work Activity</h4>
-          <p>Daily tasks performed by our team</p>
+          <h4>SEO Work Log</h4>
+          <p>Tasks completed this month</p>
         </div>
+
       </div>
 
-      {/* LOOP DATE WISE */}
-      {data.map((day, index) => (
 
-        <div key={index} className="mb-4">
+      {/* STATUS */}
 
-          {/* DATE */}
-          <h6 className="fw-bold mb-2">
-            📅 {formatDate(day.date)}
-          </h6>
+      <div className="wl-status-box">
 
-          {/* GRID */}
-          <div className="wl-grid">
-
-            <TaskSection
-              title="On Page Optimization"
-              tasks={day.onPage}
-            />
-
-            <TaskSection
-              title="Technical SEO"
-              tasks={day.technical}
-            />
-
-            <TaskSection
-              title="Off Page SEO"
-              tasks={day.offPage}
-            />
-
-          </div>
-
+        <div>
+          <h6>Monthly Status</h6>
+          <p>{data.status || "No Status"}</p>
         </div>
 
-      ))}
+        <div>
+          <h6>Technical Health</h6>
+          <p>{data.health || 0}%</p>
+        </div>
+
+      </div>
+
+
+      {/* TASK GRID */}
+
+      <div className="wl-grid">
+
+        <TaskSection
+          title="On Page Optimization"
+          tasks={logs.onPage}
+        />
+
+        <TaskSection
+          title="Technical SEO"
+          tasks={logs.technical}
+        />
+
+        <TaskSection
+          title="Off Page SEO"
+          tasks={logs.offPage}
+        />
+
+      </div>
 
     </div>
 
@@ -116,7 +129,7 @@ const TaskSection = ({ title, tasks }) => (
 
             <div className="wl-dot done"></div>
 
-            <p>{task}</p> {/* ✅ FIXED HERE */}
+            <p>{task?.text || "-"}</p>
 
           </li>
 
@@ -131,15 +144,3 @@ const TaskSection = ({ title, tasks }) => (
 );
 
 export default WorkLog;
-
-
-/* ================= UTIL ================= */
-
-function formatDate(dateString){
-  const d = new Date(dateString);
-  return d.toLocaleDateString("en-IN", {
-    day: "numeric",
-    month: "short",
-    year: "numeric"
-  });
-}
