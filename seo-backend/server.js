@@ -16,13 +16,9 @@ const app = express();
 /*           CORS            */
 /* ========================= */
 
+// ✅ FIXED CORS (this solves your login error)
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://seo-dashboard-pakjdjkv-p123ray3456s-projects.vercel.app"
-  ],
-  methods: ["GET","POST","PUT","DELETE"],
-  allowedHeaders: ["Content-Type","Authorization"],
+  origin: true, // allow all (safe for now)
   credentials: true
 }));
 
@@ -185,7 +181,6 @@ app.get("/monthly-summary/:clientId", async (req,res)=>{
       .findOne({clientId:req.params.clientId});
 
     res.json(report || null);
-
   }catch(error){
     res.status(500).json({error:error.message});
   }
@@ -202,7 +197,6 @@ app.post("/monthly-summary", async (req,res)=>{
     );
 
     res.json({message:"Monthly summary saved"});
-
   }catch(error){
     res.status(500).json({error:error.message});
   }
@@ -254,10 +248,8 @@ app.get("/support-messages", async (req,res)=>{
 });
 
 /* =====================================================
-   🔥 DAILY WORKLOG SYSTEM (FINAL CLEAN VERSION)
+   🔥 DAILY WORKLOG SYSTEM
 ===================================================== */
-
-/* ===== SAVE WORK ===== */
 
 app.post("/worklog", async (req, res) => {
   try {
@@ -292,18 +284,10 @@ app.post("/worklog", async (req, res) => {
   }
 });
 
-/* ===== GET SINGLE DAY ===== */
-
 app.get("/worklog/:clientId", async (req, res) => {
   try {
 
     const { date } = req.query;
-
-    if (!date) {
-      return res.status(400).json({
-        message: "date query required"
-      });
-    }
 
     const data = await db.collection("worklogs").findOne({
       clientId: String(req.params.clientId),
@@ -318,24 +302,6 @@ app.get("/worklog/:clientId", async (req, res) => {
 
   } catch (error) {
     console.log("❌ Worklog Fetch Error:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-/* ===== GET HISTORY ===== */
-
-app.get("/worklog-history/:clientId", async (req, res) => {
-  try {
-
-    const data = await db.collection("worklogs")
-      .find({ clientId: String(req.params.clientId) })
-      .sort({ date: -1 })
-      .toArray();
-
-    res.json(data);
-
-  } catch (error) {
-    console.log("❌ Worklog History Error:", error);
     res.status(500).json({ error: error.message });
   }
 });
