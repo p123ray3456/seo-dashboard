@@ -1,10 +1,12 @@
-import { NavLink, Outlet, useParams, Navigate } from "react-router-dom";
+import { NavLink, Outlet, useParams, Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const ClientLayout = () => {
 
   const { clientId } = useParams();
   const storedClientId = localStorage.getItem("clientId");
+
+  const navigate = useNavigate(); 
 
   const [clientName, setClientName] = useState("SEO Dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -28,6 +30,15 @@ const ClientLayout = () => {
 
   }, [clientId]);
 
+  /* ================= LOGOUT FUNCTION ================= */
+
+  const handleLogout = () => {
+    localStorage.removeItem("clientId");
+    localStorage.removeItem("token");
+
+    navigate("/login", { replace: true }); 
+  };
+
   /* ================= MENU ================= */
 
   const menu = [
@@ -35,10 +46,10 @@ const ClientLayout = () => {
     { name: "Search Console", path: "search-console", icon: "bi-search" },
     { name: "Keyword Performance", path: "keywords", icon: "bi-bar-chart" },
     { name: "Traffic Growth", path: "traffic", icon: "bi-graph-up" },
-    { name: "Work Log", path: "work-log", icon: "bi-journal-text" },
-    { name: "Leads & Conversions", path: "leads", icon: "bi-currency-dollar" },
+    { name: "Daily Work Log", path: "work-log", icon: "bi-journal-text" },
     { name: "Monthly Summary", path: "monthly-summary", icon: "bi-calendar" },
     { name: "Next Month Plan", path: "next-month-plan", icon: "bi-lightbulb" },
+    { name: "Leads & Conversions", path: "leads", icon: "bi-currency-dollar" },
     { name: "Support / Queries", path: "support", icon: "bi-chat-dots" },
     { name: "Settings", path: "settings", icon: "bi-gear" },
   ];
@@ -106,10 +117,7 @@ const ClientLayout = () => {
 
           <button
             className="btn btn-outline-light w-100"
-            onClick={() => {
-              localStorage.clear();
-              window.location.href = "/login";
-            }}
+            onClick={handleLogout}
           >
             Sign Out
           </button>
@@ -130,16 +138,12 @@ const ClientLayout = () => {
 
       <style>{`
 
-/* LAYOUT */
-
 .dashboard-container{
 display:flex;
 height:100vh;
 background:#f1f5f9;
 overflow:hidden;
 }
-
-/* SIDEBAR */
 
 .sidebar{
 width:260px;
@@ -152,16 +156,12 @@ transition:0.3s;
 overflow-y:auto;
 }
 
-/* MAIN CONTENT */
-
 .main-content{
 flex:1;
 padding:24px;
 overflow-y:auto;
 height:100vh;
 }
-
-/* MENU */
 
 .menu-item{
 text-decoration:none;
@@ -184,14 +184,10 @@ color:white;
 box-shadow:0 4px 12px rgba(37,99,235,0.4);
 }
 
-/* LOGOUT */
-
 .logout-section{
 border-top:1px solid #1e293b;
 padding-top:15px;
 }
-
-/* MOBILE HEADER */
 
 .mobile-header{
 display:none;
@@ -209,8 +205,6 @@ font-size:22px;
 cursor:pointer;
 }
 
-/* TABLET */
-
 @media (max-width:992px){
 
 .sidebar{
@@ -222,8 +216,6 @@ padding:20px;
 }
 
 }
-
-/* MOBILE */
 
 @media (max-width:768px){
 
