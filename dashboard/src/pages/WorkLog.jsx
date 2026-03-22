@@ -5,100 +5,57 @@ import "../styles/workLog.css";
 const WorkLog = () => {
 
   const { clientId } = useParams();
-
-  const [data, setData] = useState(null);
-
-  const month = new Date().toISOString().slice(0, 7);
+  const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-
-    const loadWorkLog = async () => {
-
-      try {
-
-        const res = await fetch(
-          `https://seo-dashboard-production-ec44.up.railway.app/seo/work-log?clientId=${clientId}&month=${month}`
-        );
-
-        const result = await res.json();
-
-        setData(result);
-
-      } catch (error) {
-
-        console.error("WorkLog error:", error);
-
-      }
-
-    };
-
-    loadWorkLog();
-
+    loadLogs();
   }, [clientId]);
 
-  if (!data) {
-    return <div className="wl-wrapper container-fluid">Loading...</div>;
-  }
+  const loadLogs = async () => {
 
-  const logs = data.logs || {
-    onPage: [],
-    technical: [],
-    offPage: [],
+    try {
+
+      const res = await fetch(
+        `https://seo-dashboard-production-ec44.up.railway.app/worklog-history/${clientId}`
+      );
+
+      const data = await res.json();
+
+      setLogs(data);
+
+    } catch (err) {
+      console.log("Error:", err);
+    }
+
   };
+
+  if (!logs.length) {
+    return (
+      <div className="wl-wrapper container-fluid">
+        <h5>No work logs available</h5>
+      </div>
+    );
+  }
 
   return (
 
     <div className="wl-wrapper container-fluid">
 
-      {/* HEADER */}
+      <h4 className="mb-3">📅 Daily Work Reports</h4>
 
-      <div className="wl-header">
+      {logs.map((day, index) => (
 
-        <div>
-          <h4>SEO Work Log</h4>
-          <p>Tasks completed this month</p>
+        <div key={index} className="wl-card mb-3 p-3 shadow-sm">
+
+          <h6 className="fw-bold mb-2">Date: {day.date}</h6>
+
+          <TaskSection title="On Page" tasks={day.onPage} />
+          <TaskSection title="Technical" tasks={day.technical} />
+          <TaskSection title="Off Page" tasks={day.offPage} />
+
         </div>
 
-      </div>
-
-
-      {/* STATUS */}
-
-      <div className="wl-status-box">
-
-        <div>
-          <h6>Monthly Status</h6>
-          <p>{data.status || "No Status"}</p>
-        </div>
-
-        <div>
-          <h6>Technical Health</h6>
-          <p>{data.health || 0}%</p>
-        </div>
-
-      </div>
-
-
-      {/* TASK GRID */}
-
-      <div className="wl-grid">
-
-        <TaskSection
-          title="On Page Optimization"
-          tasks={logs.onPage}
-        />
-
-        <TaskSection
-          title="Technical SEO"
-          tasks={logs.technical}
-        />
-
-        <TaskSection
-          title="Off Page SEO"
-          tasks={logs.offPage}
-        />
-
-      </div>
+      ))}
 
     </div>
 
@@ -106,37 +63,20 @@ const WorkLog = () => {
 
 };
 
-
-/* ================= TASK SECTION ================= */
-
 const TaskSection = ({ title, tasks }) => (
 
-  <div className="wl-card">
+  <div className="mb-2">
 
-    <h6>{title}</h6>
+    <strong>{title}</strong>
 
     {(tasks || []).length === 0 ? (
-
-      <p className="text-muted">No tasks added</p>
-
+      <p className="text-muted">No tasks</p>
     ) : (
-
       <ul>
-
-        {tasks.map((task, i) => (
-
-          <li className="wl-item" key={i}>
-
-            <div className="wl-dot done"></div>
-
-            <p>{task?.text || "-"}</p>
-
-          </li>
-
+        {tasks.map((t, i) => (
+          <li key={i}>✅ {t}</li>
         ))}
-
       </ul>
-
     )}
 
   </div>

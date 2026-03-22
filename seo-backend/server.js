@@ -369,6 +369,106 @@ res.json(messages);
 
 });
 
+app.get("/worklog-history/:clientId", async (req, res) => {
+
+  try {
+
+    const data = await db.collection("worklogs")
+      .find({ clientId: String(req.params.clientId) })
+      .sort({ date: -1 })
+      .toArray();
+
+    res.json(data);
+
+  } catch (error) {
+
+    console.log(error);
+    res.status(500).json({ error: error.message });
+
+  }
+
+});
+
+/* ================= WORKLOG SYSTEM ================= */
+
+/* SAVE DAILY WORK */
+
+app.post("/worklog", async (req, res) => {
+
+  try {
+
+    const { clientId, date, onPage, technical, offPage } = req.body;
+
+    if (!clientId || !date) {
+      return res.status(400).json({
+        message: "clientId and date required"
+      });
+    }
+
+    await db.collection("worklogs").updateOne(
+
+      { clientId: String(clientId), date },
+
+      {
+        $set: {
+          clientId: String(clientId),
+          date,
+          onPage: onPage || [],
+          technical: technical || [],
+          offPage: offPage || []
+        }
+      },
+
+      { upsert: true }
+
+    );
+
+    res.json({ message: "Worklog saved successfully" });
+
+  } catch (error) {
+
+    console.log("❌ Worklog Save Error:", error);
+    res.status(500).json({ error: error.message });
+
+  }
+
+});
+
+
+/* GET SINGLE DAY */
+
+app.get("/worklog/:clientId", async (req, res) => {
+
+  try {
+
+    const { date } = req.query;
+
+    if (!date) {
+      return res.status(400).json({
+        message: "date query required"
+      });
+    }
+
+    const data = await db.collection("worklogs").findOne({
+      clientId: String(req.params.clientId),
+      date
+    });
+
+    res.json(data || {
+      onPage: [],
+      technical: [],
+      offPage: []
+    });
+
+  } catch (error) {
+
+    console.log("❌ Worklog Fetch Error:", error);
+    res.status(500).json({ error: error.message });
+
+  }
+
+});
+
 /* ================= SERVER ================= */
 
 const PORT = process.env.PORT || 5000;

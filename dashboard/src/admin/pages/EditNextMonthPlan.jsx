@@ -1,104 +1,154 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const EditNextMonthPlan = () => {
 
- const [clients,setClients] = useState([]);
- const [clientId,setClientId] = useState("");
- const [month,setMonth] = useState("");
+  const [clients, setClients] = useState([]);
+  const [clientId, setClientId] = useState("");
+  const [month, setMonth] = useState("");
+  const [tasks, setTasks] = useState([""]);
 
- const [tasks,setTasks] = useState([""]);
+  const [showReminder, setShowReminder] = useState(false);
 
- useEffect(()=>{
-  loadClients();
- },[]);
+  /* ================= CHECK LAST 10 DAYS ================= */
 
- const loadClients = async () => {
+  useEffect(() => {
 
-  const res = await axios.get("https://seo-dashboard-production-ec44.up.railway.app/clients");
-  setClients(res.data);
+    const today = new Date();
 
- };
+    const lastDate = new Date(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      0
+    ).getDate();
 
- const addTask = () => {
-  setTasks([...tasks,""]);
- };
+    if (today.getDate() >= lastDate - 9) {
+      setShowReminder(true);
+    }
 
- const updateTask = (value,index) => {
+    loadClients();
 
-  const updated=[...tasks];
-  updated[index]=value;
+  }, []);
 
-  setTasks(updated);
+  /* ================= LOAD CLIENTS ================= */
 
- };
+  const loadClients = async () => {
 
- const savePlan = async () => {
+    const res = await axios.get(
+      "https://seo-dashboard-production-ec44.up.railway.app/clients"
+    );
 
-  const roadmap = tasks.map(task=>({
-   title:task,
-   status:"Planned"
-  }));
+    setClients(res.data);
 
-  await axios.post("https://seo-dashboard-production-ec44.up.railway.app/next-month-plan",{
+  };
 
-   clientId,
-   month,
-   roadmap
+  /* ================= TASK HANDLING ================= */
 
-  });
+  const addTask = () => {
+    setTasks([...tasks, ""]);
+  };
 
-  alert("Plan saved");
+  const updateTask = (value, index) => {
 
- };
+    const updated = [...tasks];
+    updated[index] = value;
 
- return(
+    setTasks(updated);
 
-  <div className="container">
+  };
 
-   <h3 className="mb-4">Edit Next Month Plan</h3>
+  /* ================= SAVE ================= */
 
-   <select
-    className="form-control mb-3"
-    onChange={(e)=>setClientId(e.target.value)}
-   >
+  const savePlan = async () => {
 
-    <option>Select Client</option>
+    const roadmap = tasks.map(task => ({
+      title: task,
+      status: "Planned"
+    }));
 
-    {clients.map(client=>(
-      <option key={client.id} value={client.id}>
-        {client.name}
-      </option>
-    ))}
+    await axios.post(
+      "https://seo-dashboard-production-ec44.up.railway.app/next-month-plan",
+      {
+        clientId,
+        month,
+        roadmap
+      }
+    );
 
-   </select>
+    alert("Plan saved");
 
-   <input
-    className="form-control mb-3"
-    placeholder="Month"
-    onChange={(e)=>setMonth(e.target.value)}
-   />
+  };
 
-   {tasks.map((task,index)=>(
-    <input
-      key={index}
-      className="form-control mb-2"
-      placeholder="Plan Task"
-      onChange={(e)=>updateTask(e.target.value,index)}
-    />
-   ))}
+  /* ================= UI ================= */
 
-   <button className="btn btn-secondary me-2" onClick={addTask}>
-    Add Task
-   </button>
+  return (
 
-   <button className="btn btn-primary" onClick={savePlan}>
-    Save Plan
-   </button>
+    <div className="container">
 
-  </div>
+      {/* 🔥 REMINDER ALERT */}
 
- );
+      {showReminder && (
+        <div className="alert alert-warning d-flex justify-content-between align-items-center">
+
+          <div>
+            ⚠️ <strong>Reminder:</strong> Last days of month!  
+            Please create next month plan.
+          </div>
+
+          <span className="badge bg-dark">Important</span>
+
+        </div>
+      )}
+
+      <h3 className="mb-4">Edit Next Month Plan</h3>
+
+      {/* CLIENT */}
+
+      <select
+        className="form-control mb-3"
+        onChange={(e)=>setClientId(e.target.value)}
+      >
+
+        <option>Select Client</option>
+
+        {clients.map(client => (
+          <option key={client.id} value={client.id}>
+            {client.name}
+          </option>
+        ))}
+
+      </select>
+
+      {/* MONTH */}
+
+      <input
+        className="form-control mb-3"
+        placeholder="Month (Example: April 2026)"
+        onChange={(e)=>setMonth(e.target.value)}
+      />
+
+      {/* TASKS */}
+
+      {tasks.map((task,index)=>(
+        <input
+          key={index}
+          className="form-control mb-2"
+          placeholder="Plan Task"
+          onChange={(e)=>updateTask(e.target.value,index)}
+        />
+      ))}
+
+      <button className="btn btn-secondary me-2" onClick={addTask}>
+        Add Task
+      </button>
+
+      <button className="btn btn-primary" onClick={savePlan}>
+        Save Plan
+      </button>
+
+    </div>
+
+  );
 
 };
 

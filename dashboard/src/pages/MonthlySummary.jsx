@@ -1,40 +1,91 @@
 import "../styles/monthlySummary.css";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 
 const MonthlySummary = () => {
 
   const { clientId } = useParams();
-  const [report, setReport] = useState(null);
 
-  useEffect(() => {
-    loadReport();
-  }, []);
+  const [summary, setSummary] = useState(null);
 
-  const loadReport = async () => {
+  /* ================= GET LAST MONTH ================= */
 
-    try {
+  const getLastMonth = () => {
 
-      const res = await fetch(
-  `https://seo-dashboard-production-ec44.up.railway.app/seo/search-console?clientId=${clientId}&range=${range}`
-);
+    const now = new Date();
 
-      setReport(res.data);
+    const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
 
-    } catch (err) {
-
-      console.log(err);
-
-    }
+    return lastMonth.toISOString().slice(0,7); // YYYY-MM
 
   };
 
-  if (!report) {
+  /* ================= LOAD DATA ================= */
+
+  useEffect(() => {
+
+    const loadSummary = async () => {
+
+      try {
+
+        const res = await fetch(
+          `https://seo-dashboard-production-ec44.up.railway.app/worklog-history/${clientId}`
+        );
+
+        const data = await res.json();
+
+        const lastMonth = getLastMonth();
+
+        /* FILTER LAST MONTH DATA */
+
+        const monthlyLogs = data.filter(log =>
+          log.date.startsWith(lastMonth)
+        );
+
+        if (monthlyLogs.length === 0) {
+          setSummary(null);
+          return;
+        }
+
+        /* GENERATE SUMMARY */
+
+        let onPageCount = 0;
+        let technicalCount = 0;
+        let offPageCount = 0;
+
+        monthlyLogs.forEach(log => {
+
+          onPageCount += log.onPage?.length || 0;
+          technicalCount += log.technical?.length || 0;
+          offPageCount += log.offPage?.length || 0;
+
+        });
+
+        setSummary({
+          month: lastMonth,
+          onPageCount,
+          technicalCount,
+          offPageCount,
+          totalDays: monthlyLogs.length
+        });
+
+      } catch (err) {
+        console.log(err);
+      }
+
+    };
+
+    loadSummary();
+
+  }, [clientId]);
+
+  /* ================= UI ================= */
+
+  if (!summary) {
 
     return (
       <div className="ms-wrapper container-fluid">
-        <h4>No monthly report available yet.</h4>
+        <h4>It will be generated in the first week of the month.</h4>
       </div>
     );
 
@@ -44,50 +95,29 @@ const MonthlySummary = () => {
 
     <div className="ms-wrapper container-fluid">
 
-      {/* HEADER */}
-
       <div className="ms-header">
-
-        <div>
-          <h4>Monthly Summary</h4>
-          <p>Executive overview of this month's performance.</p>
-        </div>
-
+        <h4>📊 Monthly Work Summary</h4>
+        <p>Auto-generated from daily SEO activities</p>
       </div>
-
-
-      {/* SUMMARY CARD */}
 
       <div className="ms-card">
 
-        <h5>{report.month} Performance Review</h5>
-
-        <p>{report.summary}</p>
+        <h5>{summary.month} Performance</h5>
 
         <p>
-          Organic traffic increased by{" "}
-          <strong>{report.trafficGrowth}</strong>, primarily driven by{" "}
-          <strong>{report.focusKeyword}</strong>.
+          In this month, SEO activities were performed on{" "}
+          <strong>{summary.totalDays}</strong> days.
         </p>
 
+        <ul>
+          <li>✅ On Page Tasks: {summary.onPageCount}</li>
+          <li>⚙️ Technical Tasks: {summary.technicalCount}</li>
+          <li>🔗 Off Page Tasks: {summary.offPageCount}</li>
+        </ul>
 
-        {/* AUTHOR */}
-
-        <div className="ms-author">
-
-          <div className="ms-avatar">
-            {report.author?.substring(0, 2)}
-          </div>
-
-          <div>
-
-            <strong>{report.author}</strong>
-
-            <small>{report.role}</small>
-
-          </div>
-
-        </div>
+        <p className="mt-3 text-muted">
+          This report is automatically generated based on daily work logs.
+        </p>
 
       </div>
 
