@@ -1,0 +1,104 @@
+/* ===== MAIN WRAPPER ===== */
+
+.tw-wrapper {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* ===== CARD ===== */
+
+.tw-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+/* ===== HEADER ===== */
+
+.tw-title {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.tw-date {
+  font-size: 13px;
+  color: gray;
+}
+
+/* ===== DROPDOWN ===== */
+
+.tw-select {
+  border-radius: 8px;
+  padding: 10px;
+}
+
+/* ===== SECTION ===== */
+
+.tw-section {
+  margin-top: 20px;
+}
+
+.tw-section h6 {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* ===== TASK ITEM ===== */
+
+.tw-task {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.tw-task input {
+  margin-right: 10px;
+  transform: scale(1.2);
+}
+
+/* ===== ADD TASK ===== */
+
+.tw-add {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.tw-add input {
+  flex: 1;
+  border-radius: 8px;
+}
+
+.tw-add button {
+  border-radius: 8px;
+}
+
+/* ===== SAVE BUTTON ===== */
+
+.tw-save {
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 600;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 768px) {
+
+  .tw-wrapper {
+    padding: 10px;
+  }
+
+  .tw-card {
+    padding: 15px;
+  }
+
+  .tw-title {
+    font-size: 18px;
+  }
+
+}

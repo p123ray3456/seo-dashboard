@@ -49,7 +49,7 @@ const ClientLayout = () => {
     { name: "Daily Work Log", path: "work-log", icon: "bi-journal-text" },
     { name: "Monthly Summary", path: "monthly-summary", icon: "bi-calendar" },
     { name: "Next Month Plan", path: "next-month-plan", icon: "bi-lightbulb" },
-    { name: "Leads & Conversions", path: "leads", icon: "bi-currency-dollar" },
+    // { name: "Leads & Conversions", path: "leads", icon: "bi-currency-dollar" },
     { name: "Support / Queries", path: "support", icon: "bi-chat-dots" },
     { name: "Settings", path: "settings", icon: "bi-gear" },
   ];

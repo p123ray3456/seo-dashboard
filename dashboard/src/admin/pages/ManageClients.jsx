@@ -173,12 +173,12 @@ const ManageClients = () => {
                           </button>
 
                           {/* CLIENT SETTINGS */}
-                          <button
+                          {/* <button
                             className="btn btn-sm btn-outline-secondary"
                             onClick={() => openSettings(client.id)}
                           >
                             ⚙
-                          </button>
+                          </button> */}
 
                         </div>
 

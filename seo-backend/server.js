@@ -397,7 +397,16 @@ app.post("/worklog", async (req, res) => {
 
   try {
 
-    const { clientId, date, onPage, technical, offPage } = req.body;
+    const { 
+      clientId, 
+      date, 
+      onPage, 
+      technical, 
+      offPage,
+      customOnPage,
+      customTechnical,
+      customOffPage
+    } = req.body;
 
     if (!clientId || !date) {
       return res.status(400).json({
@@ -413,9 +422,16 @@ app.post("/worklog", async (req, res) => {
         $set: {
           clientId: String(clientId),
           date,
+
+          // ✅ DEFAULT TASKS
           onPage: onPage || [],
           technical: technical || [],
-          offPage: offPage || []
+          offPage: offPage || [],
+
+          // 🔥 CUSTOM TASKS (NEW)
+          customOnPage: customOnPage || [],
+          customTechnical: customTechnical || [],
+          customOffPage: customOffPage || []
         }
       },
 
@@ -423,7 +439,7 @@ app.post("/worklog", async (req, res) => {
 
     );
 
-    res.json({ message: "Worklog saved successfully" });
+    res.json({ message: "✅ Worklog saved successfully" });
 
   } catch (error) {
 
@@ -455,9 +471,17 @@ app.get("/worklog/:clientId", async (req, res) => {
     });
 
     res.json(data || {
+
+      // ✅ DEFAULT TASKS
       onPage: [],
       technical: [],
-      offPage: []
+      offPage: [],
+
+      // 🔥 CUSTOM TASKS (IMPORTANT)
+      customOnPage: [],
+      customTechnical: [],
+      customOffPage: []
+
     });
 
   } catch (error) {

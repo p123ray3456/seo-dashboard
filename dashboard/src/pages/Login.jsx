@@ -20,13 +20,16 @@ const Login = () => {
     setError("");
 
     try {
-      const res = await fetch("https://seo-dashboard-production-ec44.up.railway.app/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(form),
-      });
+      const res = await fetch(
+        "https://seo-dashboard-production-ec44.up.railway.app/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+        }
+      );
 
       const data = await res.json();
 
@@ -40,11 +43,19 @@ const Login = () => {
       localStorage.setItem("role", data.role);
       localStorage.setItem("clientId", data.clientId || "");
 
-      // 🚀 REDIRECT BASED ON ROLE
+      // 🚀 ROLE BASED REDIRECT
+
       if (data.role === "admin") {
         navigate("/admin/overview");
-      } else {
+
+      } else if (data.role === "client") {
         navigate(`/dashboard/${data.clientId}/overview`);
+
+      } else if (data.role === "team") {
+        navigate(`/team/${data.clientId}/dashboard`);
+
+      } else {
+        setError("Invalid role assigned");
       }
 
     } catch (err) {

@@ -20,8 +20,10 @@ import ClientMessages from "./admin/pages/ClientMessages";
 
 /* ================= CLIENT DASHBOARD ================= */
 
-import ClientLayout from "./client/ClientLayout";
-
+import TeamLayout from "./admin/TeamLayout";
+import TeamDashboard from "./admin/TeamDashboard";
+import TeamWorkLog from "./admin/TeamWorkLog";
+import TeamPlan from "./admin/TeamPlan";
 /* CLIENT PAGES */
 import Overview from "./pages/Overview";
 import SearchConsole from "./pages/SearchConsole";
@@ -33,7 +35,7 @@ import NextMonthPlan from "./pages/NextMonthPlan";
 import Settings from "./pages/Settings";
 import Support from "./pages/Support";
 import LeadsConversions from "./pages/LeadsConversions";
-
+import ClientLayout from "./client/ClientLayout";
 function App() {
   return (
     <Routes>
@@ -73,6 +75,12 @@ function App() {
         <Route path="team" element={<TeamMembers />} />
         <Route path="settings" element={<AdminSettings />} />
       </Route>
+
+      <Route path="/team/:clientId" element={<TeamLayout />}>
+  <Route path="dashboard" element={<TeamDashboard />} />
+  <Route path="worklog" element={<TeamWorkLog />} />
+  <Route path="plan" element={<TeamPlan />} />
+</Route>
 
       {/* ================= CLIENT DASHBOARD ================= */}
       <Route

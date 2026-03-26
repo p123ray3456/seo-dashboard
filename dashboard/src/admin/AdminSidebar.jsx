@@ -8,7 +8,7 @@ const AdminSidebar = () => {
   const items = [
     { label: "Agency Overview", path: "overview" },
     { label: "Manage Clients", path: "clients" },
-    { label: "Monthly Summary", path: "monthly-summary" },
+    // { label: "Monthly Summary", path: "monthly-summary" },
     { label: "Next Month Plan", path: "next-month-plan" },
     { label: "Client Messages", path: "messages" },
     { label: "Team Members", path: "team" },
