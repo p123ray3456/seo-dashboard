@@ -497,6 +497,88 @@ app.get("/worklog/:clientId", async (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
+const axios = require("axios");
+
+/* ================= BLOG GENERATOR (ADVANCED) ================= */
+
+app.post("/generate-blog", async (req, res) => {
+
+  try {
+
+    const {
+      title,
+      keyword,
+      secondaryKeywords,
+      audience,
+      tone,
+      wordCount,
+      blogType,
+      cta
+    } = req.body;
+
+    if (!title || !keyword) {
+      return res.status(400).json({
+        error: "Title and Focus Keyword required"
+      });
+    }
+
+    /* ================= PROMPT ================= */
+
+    const prompt = `
+Write a high-quality SEO blog.
+
+Title: ${title}
+Focus Keyword: ${keyword}
+Secondary Keywords: ${secondaryKeywords || "N/A"}
+Target Audience: ${audience || "General Audience"}
+Tone: ${tone || "Professional"}
+Word Count: ${wordCount || "800"}
+Blog Type: ${blogType || "Informational"}
+
+Requirements:
+- SEO optimized headings (H1, H2, H3)
+- Engaging introduction
+- Proper keyword placement
+- Easy readability
+- Human-like tone
+
+End with a strong CTA:
+${cta || "Contact us for more information."}
+`;
+
+    /* ================= API CALL ================= */
+
+    const response = await axios.post(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        model: "meta-llama/llama-3-8b-instruct",
+        messages: [
+          { role: "user", content: prompt }
+        ]
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    const blog = response.data.choices[0].message.content;
+
+    res.json({ blog });
+
+  } catch (error) {
+
+    console.log("Free API Error:", error.response?.data || error.message);
+
+    res.status(500).json({
+      error: "Blog generation failed"
+    });
+
+  }
+
+});
 app.listen(PORT, ()=>{
 console.log(`🚀 Backend running on port ${PORT}`);
 });

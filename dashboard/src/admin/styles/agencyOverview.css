@@ -1,156 +1,177 @@
-.ao-wrapper {
-  max-width: 1100px;
+/* ===== WRAPPER ===== */
+.ao-wrapper{
+padding:24px;
 }
 
-/* Header */
-.ao-header {
-  margin-bottom: 20px;
+/* ===== HEADER ===== */
+.ao-header h4{
+font-weight:600;
+margin-bottom:4px;
 }
 
-.ao-header h4 {
-  font-weight: 600;
+.ao-header p{
+color:#6b7280;
+margin-bottom:20px;
 }
 
-.ao-header p {
-  color: #6c757d;
-  margin: 0;
+/* ===== STATS ===== */
+.ao-stats{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+margin-bottom:20px;
 }
 
-/* Stats */
-.ao-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
+.ao-card{
+background:white;
+border-radius:14px;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 4px 14px rgba(0,0,0,0.05);
+transition:0.2s;
 }
 
-.ao-card {
-  background: #fff;
-  padding: 18px;
-  border-radius: 14px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.04);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.ao-card:hover{
+transform:translateY(-3px);
 }
 
-.ao-card h3 {
-  margin: 4px 0;
-  font-weight: 600;
+.ao-card small{
+color:#6b7280;
 }
 
-.ao-card small {
-  color: #6c757d;
+.ao-card h3{
+margin:5px 0;
+font-weight:700;
 }
 
-.ao-card i {
-  font-size: 24px;
-  color: #0d6efd;
+.ao-card i{
+font-size:22px;
+color:#2563eb;
+background:#eff6ff;
+padding:12px;
+border-radius:10px;
 }
 
-.ao-card .up {
-  color: #16a34a;
-  font-size: 12px;
+/* ===== GRID ===== */
+.ao-grid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:20px;
 }
 
-.ao-card .muted {
-  color: #6c757d;
-  font-size: 12px;
+/* ===== BOX ===== */
+.ao-box{
+background:white;
+border-radius:14px;
+padding:18px;
+box-shadow:0 4px 14px rgba(0,0,0,0.05);
 }
 
-/* Grid */
-.ao-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 20px;
+.ao-box h6{
+margin-bottom:15px;
+font-weight:600;
 }
 
-/* Boxes */
-.ao-box {
-  background: #fff;
-  padding: 18px;
-  border-radius: 14px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+/* ===== CLIENT ITEM ===== */
+.activity-item{
+display:flex;
+gap:12px;
+align-items:flex-start;
+margin-bottom:15px;
 }
 
-.ao-box h6 {
-  font-weight: 600;
-  margin-bottom: 16px;
+.badge{
+width:36px;
+height:36px;
+border-radius:50%;
+background:#2563eb;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:600;
 }
 
-/* Activity */
-.activity-item {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 14px;
+.activity-item p{
+margin:0;
+font-size:13px;
+color:#6b7280;
 }
 
-.activity-item .badge {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: #e0ebff;
-  color: #0d6efd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
+.muted{
+color:#9ca3af;
+font-size:12px;
 }
 
-.activity-item p {
-  margin: 2px 0;
-  font-size: 14px;
+/* ===== TABLET ===== */
+@media (max-width:992px){
+
+.ao-stats{
+grid-template-columns:1fr 1fr;
 }
 
-.activity-item small {
-  color: #6c757d;
+.ao-grid{
+grid-template-columns:1fr;
 }
 
-/* Tasks */
-.task-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 12px;
-  border-radius: 10px;
-  margin-bottom: 10px;
 }
 
-.task-item > div {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* ===== MOBILE ===== */
+@media (max-width:768px){
+
+.ao-wrapper{
+padding:16px;
 }
 
-.task-item.high {
-  background: #fff1f2;
+/* STACK CARDS */
+.ao-stats{
+grid-template-columns:1fr;
+gap:14px;
 }
 
-.task-item.med {
-  background: #fff7ed;
+/* FULL WIDTH */
+.ao-grid{
+grid-template-columns:1fr;
+gap:14px;
 }
 
-.task-item.low {
-  background: #f0fdf4;
+/* SMALLER TEXT */
+.ao-card h3{
+font-size:20px;
 }
 
-.priority {
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 6px;
+.ao-card{
+padding:16px;
 }
 
-.priority.high {
-  background: #fecaca;
-  color: #991b1b;
+/* CLIENT LIST */
+.activity-item{
+gap:10px;
 }
 
-.priority.med {
-  background: #fed7aa;
-  color: #9a3412;
+.badge{
+width:32px;
+height:32px;
+font-size:13px;
 }
 
-.priority.low {
-  background: #bbf7d0;
-  color: #166534;
+}
+
+/* ===== SMALL MOBILE ===== */
+@media (max-width:480px){
+
+.ao-header h4{
+font-size:18px;
+}
+
+.ao-header p{
+font-size:13px;
+}
+
+.ao-card h3{
+font-size:18px;
+}
+
 }

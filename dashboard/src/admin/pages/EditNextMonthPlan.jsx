@@ -85,17 +85,18 @@ const EditNextMonthPlan = () => {
 
     <div className="container">
 
-      {/* 🔥 REMINDER ALERT */}
-
+      {/* 🔥 CLEAN REMINDER */}
       {showReminder && (
-        <div className="alert alert-warning d-flex justify-content-between align-items-center">
+        <div className="reminder-box">
 
-          <div>
-            ⚠️ <strong>Reminder:</strong> Last days of month!  
-            Please create next month plan.
+          <div className="reminder-left">
+            ⚠️ <strong>Last days of month</strong>
+            <span>Please create next month plan</span>
           </div>
 
-          <span className="badge bg-dark">Important</span>
+          <div className="reminder-tag">
+            Important
+          </div>
 
         </div>
       )}
@@ -103,12 +104,10 @@ const EditNextMonthPlan = () => {
       <h3 className="mb-4">Edit Next Month Plan</h3>
 
       {/* CLIENT */}
-
       <select
         className="form-control mb-3"
         onChange={(e)=>setClientId(e.target.value)}
       >
-
         <option>Select Client</option>
 
         {clients.map(client => (
@@ -116,11 +115,9 @@ const EditNextMonthPlan = () => {
             {client.name}
           </option>
         ))}
-
       </select>
 
       {/* MONTH */}
-
       <input
         className="form-control mb-3"
         placeholder="Month (Example: April 2026)"
@@ -128,7 +125,6 @@ const EditNextMonthPlan = () => {
       />
 
       {/* TASKS */}
-
       {tasks.map((task,index)=>(
         <input
           key={index}
@@ -145,6 +141,64 @@ const EditNextMonthPlan = () => {
       <button className="btn btn-primary" onClick={savePlan}>
         Save Plan
       </button>
+
+      {/* ================= STYLES ================= */}
+      <style>{`
+
+/* REMINDER BOX */
+.reminder-box{
+  background: #fef9c3;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* LEFT TEXT */
+.reminder-left{
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+}
+
+.reminder-left strong{
+  color: #92400e;
+  font-size: 14px;
+}
+
+.reminder-left span{
+  color: #78350f;
+}
+
+/* TAG */
+.reminder-tag{
+  background: #111827;
+  color: white;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+/* MOBILE */
+@media (max-width:768px){
+
+.reminder-box{
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.reminder-tag{
+  align-self: flex-end;
+}
+
+}
+
+      `}</style>
 
     </div>
 

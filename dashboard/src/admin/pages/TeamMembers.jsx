@@ -5,7 +5,6 @@ const TeamMembers = () => {
 
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
-
   const [members, setMembers] = useState([]);
 
   const [newMember, setNewMember] = useState({
@@ -14,137 +13,74 @@ const TeamMembers = () => {
     role: "SEO Strategist",
   });
 
-  /* ================= LOAD MEMBERS ================= */
-
   useEffect(() => {
     fetchMembers();
   }, []);
 
   const fetchMembers = async () => {
     try {
-
       const res = await axios.get(
         "https://seo-dashboard-production-ec44.up.railway.app/team-members"
       );
-
       setMembers(res.data);
-
     } catch (error) {
       console.log("Error loading members", error);
     }
   };
 
-  /* ================= SEARCH ================= */
-
   const filteredMembers = members.filter((m) =>
     m.name?.toLowerCase().includes(search.toLowerCase())
   );
 
-  /* ================= ADD MEMBER ================= */
-
   const addMember = async () => {
-
     if (!newMember.name || !newMember.email) return;
 
-    try {
+    await axios.post(
+      "https://seo-dashboard-production-ec44.up.railway.app/team-members",
+      { ...newMember, status: "Active" }
+    );
 
-      await axios.post(
-        "https://seo-dashboard-production-ec44.up.railway.app/team-members",
-        {
-          ...newMember,
-          status: "Active"
-        }
-      );
+    fetchMembers();
+    setShowModal(false);
 
-      fetchMembers();
-
-      setShowModal(false);
-
-      setNewMember({
-        name: "",
-        email: "",
-        role: "SEO Strategist",
-      });
-
-    } catch (error) {
-
-      console.log("Add member error", error);
-
-    }
-
+    setNewMember({
+      name: "",
+      email: "",
+      role: "SEO Strategist",
+    });
   };
-
-  /* ================= DELETE MEMBER ================= */
 
   const deleteMember = async (id) => {
-
-    try {
-
-      await axios.delete(
-        `https://seo-dashboard-production-ec44.up.railway.app/team-members/${id}`
-      );
-
-      fetchMembers();
-
-    } catch (error) {
-
-      console.log("Delete error", error);
-
-    }
-
+    await axios.delete(
+      `https://seo-dashboard-production-ec44.up.railway.app/team-members/${id}`
+    );
+    fetchMembers();
   };
-
-  /* ================= CHANGE ROLE ================= */
 
   const changeRole = async (id, role) => {
-
-    try {
-
-      await axios.put(
-        `https://seo-dashboard-production-ec44.up.railway.app/team-members/${id}`,
-        { role }
-      );
-
-      fetchMembers();
-
-    } catch (error) {
-
-      console.log("Role update error", error);
-
-    }
-
+    await axios.put(
+      `https://seo-dashboard-production-ec44.up.railway.app/team-members/${id}`,
+      { role }
+    );
+    fetchMembers();
   };
 
-  /* ================= STATUS CHANGE ================= */
-
   const toggleStatus = async (member) => {
-
     const newStatus = member.status === "Active" ? "Away" : "Active";
 
-    try {
+    await axios.put(
+      `https://seo-dashboard-production-ec44.up.railway.app/team-members/${member._id}`,
+      { status: newStatus }
+    );
 
-      await axios.put(
-        `https://seo-dashboard-production-ec44.up.railway.app/team-members/${member._id}`,
-        { status: newStatus }
-      );
-
-      fetchMembers();
-
-    } catch (error) {
-
-      console.log("Status update error", error);
-
-    }
-
+    fetchMembers();
   };
 
   return (
     <div className="container-fluid">
 
       {/* HEADER */}
-
-      <div className="d-flex justify-content-between align-items-center mb-4">
-
+      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <div>
           <h4 className="fw-bold mb-1">Team Members</h4>
           <p className="text-muted mb-0">
@@ -159,15 +95,11 @@ const TeamMembers = () => {
           <i className="bi bi-person-plus me-2"></i>
           Invite Member
         </button>
-
       </div>
 
       {/* SEARCH */}
-
       <div className="card border-0 shadow-sm mb-3">
-
         <div className="card-body">
-
           <input
             type="text"
             placeholder="Search team member..."
@@ -175,28 +107,22 @@ const TeamMembers = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-
         </div>
-
       </div>
 
       {/* TABLE */}
-
       <div className="card border-0 shadow-sm">
-
         <div className="table-responsive">
 
           <table className="table align-middle mb-0">
 
             <thead className="table-light">
-
               <tr>
                 <th>NAME</th>
                 <th>ROLE</th>
                 <th>STATUS</th>
                 <th className="text-end">ACTIONS</th>
               </tr>
-
             </thead>
 
             <tbody>
@@ -209,35 +135,21 @@ const TeamMembers = () => {
                   .join("");
 
                 return (
-
                   <tr key={member._id}>
 
                     {/* NAME */}
-
                     <td>
-
                       <div className="d-flex align-items-center gap-3">
-
-                        <div
-                          className="rounded-circle bg-light d-flex align-items-center justify-content-center"
-                          style={{ width: 40, height: 40, fontWeight: 600 }}
-                        >
-                          {initials}
-                        </div>
-
+                        <div className="avatar">{initials}</div>
                         <div>
                           <div className="fw-semibold">{member.name}</div>
                           <small className="text-muted">{member.email}</small>
                         </div>
-
                       </div>
-
                     </td>
 
                     {/* ROLE */}
-
                     <td>
-
                       <select
                         className="form-select form-select-sm"
                         value={member.role}
@@ -245,63 +157,44 @@ const TeamMembers = () => {
                           changeRole(member._id, e.target.value)
                         }
                       >
-
                         <option>Super Admin</option>
                         <option>SEO Strategist</option>
                         <option>Content Writer</option>
                         <option>Backlink Expert</option>
-
                       </select>
-
                     </td>
 
                     {/* STATUS */}
-
                     <td>
-
                       <span
-                        className={`badge ${
-                          member.status === "Active"
-                            ? "bg-success"
-                            : "bg-warning text-dark"
-                        }`}
-                        style={{ cursor: "pointer" }}
+                        className="status-badge"
                         onClick={() => toggleStatus(member)}
                       >
                         {member.status}
                       </span>
-
                     </td>
 
-                    {/* ACTIONS */}
-
+                    {/* ACTION */}
                     <td className="text-end">
-
                       <button
                         className="btn btn-sm btn-outline-danger"
                         onClick={() => deleteMember(member._id)}
                       >
                         Delete
                       </button>
-
                     </td>
 
                   </tr>
-
                 );
 
               })}
 
               {filteredMembers.length === 0 && (
-
                 <tr>
-
                   <td colSpan="4" className="text-center py-4 text-muted">
                     No member found
                   </td>
-
                 </tr>
-
               )}
 
             </tbody>
@@ -309,32 +202,23 @@ const TeamMembers = () => {
           </table>
 
         </div>
-
       </div>
 
       {/* MODAL */}
-
       {showModal && (
-
         <div className="modal fade show d-block">
-
           <div className="modal-dialog">
-
             <div className="modal-content">
 
               <div className="modal-header">
-
                 <h5 className="modal-title">Invite Team Member</h5>
-
                 <button
                   className="btn-close"
                   onClick={() => setShowModal(false)}
                 ></button>
-
               </div>
 
               <div className="modal-body">
-
                 <input
                   className="form-control mb-2"
                   placeholder="Full name"
@@ -360,18 +244,14 @@ const TeamMembers = () => {
                     setNewMember({ ...newMember, role: e.target.value })
                   }
                 >
-
                   <option>SEO Strategist</option>
                   <option>Content Writer</option>
                   <option>Backlink Expert</option>
                   <option>Super Admin</option>
-
                 </select>
-
               </div>
 
               <div className="modal-footer">
-
                 <button
                   className="btn btn-light"
                   onClick={() => setShowModal(false)}
@@ -385,16 +265,102 @@ const TeamMembers = () => {
                 >
                   Add Member
                 </button>
-
               </div>
 
             </div>
-
           </div>
-
         </div>
-
       )}
+
+      {/* ===== STYLES ===== */}
+      <style>{`
+
+.avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#f1f5f9;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:600;
+}
+
+/* STATUS */
+.status-badge{
+  background: rgba(34,197,94,0.12);
+  color:#16a34a;
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:999px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+}
+.status-badge::before{
+  content:"";
+  width:6px;
+  height:6px;
+  background:#16a34a;
+  border-radius:50%;
+}
+
+/* MOBILE CARD */
+@media (max-width:768px){
+
+.table thead{
+  display:none;
+}
+
+.table,
+.table tbody,
+.table tr,
+.table td{
+  display:block;
+  width:100%;
+}
+
+.table tbody tr{
+  background:#fff;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:14px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.05);
+}
+
+.table tbody td{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:6px 0;
+  border:none;
+}
+
+.table tbody td:first-child{
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+}
+
+/* STATUS + DELETE SAME LINE */
+/* ===== FIX: DELETE BUTTON RIGHT SIDE ===== */
+.table tbody td:last-child{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:8px;
+}
+
+/* KEEP STATUS LEFT */
+.table tbody td:nth-child(3){
+  margin-right:auto;
+}
+
+}
+
+      `}</style>
 
     </div>
   );

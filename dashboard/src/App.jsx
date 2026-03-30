@@ -24,6 +24,7 @@ import TeamLayout from "./admin/TeamLayout";
 import TeamDashboard from "./admin/TeamDashboard";
 import TeamWorkLog from "./admin/TeamWorkLog";
 import TeamPlan from "./admin/TeamPlan";
+import TeamGenerateBlog from "./admin/TeamGenerateBlog";
 /* CLIENT PAGES */
 import Overview from "./pages/Overview";
 import SearchConsole from "./pages/SearchConsole";
@@ -80,6 +81,7 @@ function App() {
   <Route path="dashboard" element={<TeamDashboard />} />
   <Route path="worklog" element={<TeamWorkLog />} />
   <Route path="plan" element={<TeamPlan />} />
+  <Route path="generate-blog" element={<TeamGenerateBlog />} />
 </Route>
 
       {/* ================= CLIENT DASHBOARD ================= */}
