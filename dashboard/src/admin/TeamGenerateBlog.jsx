@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API = "https://seo-dashboard-production-ec44.up.railway.app/generate-blog";
+const API = "https://seo-dashboard-production-ec44.up.railway.app";
 
 const TeamGenerateBlog = () => {
 
