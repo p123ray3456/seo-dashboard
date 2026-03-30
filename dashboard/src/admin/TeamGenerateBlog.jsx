@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API = "http:seo-dashboard-pakjdjkv-p123ray3456s-projects.vercel.app";
+const API = "https://seo-dashboard-production-ec44.up.railway.app";
 
 const TeamGenerateBlog = () => {
 
