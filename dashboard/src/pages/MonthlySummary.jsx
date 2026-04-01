@@ -5,19 +5,14 @@ import { useParams } from "react-router-dom";
 const MonthlySummary = () => {
 
   const { clientId } = useParams();
-
   const [summary, setSummary] = useState(null);
 
   /* ================= GET LAST MONTH ================= */
 
   const getLastMonth = () => {
-
     const now = new Date();
-
-    const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-
-    return lastMonth.toISOString().slice(0,7); // YYYY-MM
-
+    now.setMonth(now.getMonth() - 1);
+    return now.toISOString().slice(0, 7); // YYYY-MM
   };
 
   /* ================= LOAD DATA ================= */
@@ -36,41 +31,58 @@ const MonthlySummary = () => {
 
         const lastMonth = getLastMonth();
 
-        /* FILTER LAST MONTH DATA */
+        console.log("LAST MONTH:", lastMonth);
 
-        const monthlyLogs = data.filter(log =>
-          log.date.startsWith(lastMonth)
-        );
+        /* ================= FILTER LAST MONTH ================= */
 
-        if (monthlyLogs.length === 0) {
+        const monthlyLogs = data.filter(log => {
+          if (!log.date) return false;
+          return log.date.slice(0, 7) === lastMonth;
+        });
+
+        /* ================= REMOVE DUPLICATE DAYS ================= */
+
+        const uniqueDays = new Map();
+
+        monthlyLogs.forEach(log => {
+          uniqueDays.set(log.date, log);
+        });
+
+        const finalLogs = Array.from(uniqueDays.values());
+
+        console.log("FINAL LOGS:", finalLogs);
+
+        if (finalLogs.length === 0) {
           setSummary(null);
           return;
         }
 
-        /* GENERATE SUMMARY */
+        /* ================= COUNT TASKS ================= */
 
         let onPageCount = 0;
         let technicalCount = 0;
         let offPageCount = 0;
 
-        monthlyLogs.forEach(log => {
-
+        finalLogs.forEach(log => {
           onPageCount += log.onPage?.length || 0;
           technicalCount += log.technical?.length || 0;
           offPageCount += log.offPage?.length || 0;
-
         });
+
+        /* ================= SET SUMMARY ================= */
 
         setSummary({
           month: lastMonth,
           onPageCount,
           technicalCount,
           offPageCount,
-          totalDays: monthlyLogs.length
+          totalDays: finalLogs.length
         });
 
       } catch (err) {
-        console.log(err);
+
+        console.log("Summary Error:", err);
+
       }
 
     };
@@ -82,13 +94,11 @@ const MonthlySummary = () => {
   /* ================= UI ================= */
 
   if (!summary) {
-
     return (
       <div className="ms-wrapper container-fluid">
-        <h4>It will be generated in the first week of the month.</h4>
+        <h4>No data available for last month.</h4>
       </div>
     );
-
   }
 
   return (
@@ -105,7 +115,7 @@ const MonthlySummary = () => {
         <h5>{summary.month} Performance</h5>
 
         <p>
-          In this month, SEO activities were performed on{" "}
+          SEO work was performed on{" "}
           <strong>{summary.totalDays}</strong> days.
         </p>
 
