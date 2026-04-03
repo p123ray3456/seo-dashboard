@@ -21,18 +21,19 @@ app.use(cors({
 
     const allowedOrigins = [
       "http://localhost:5173",
-      "https://seo-dashboard-pakjdjkv-p123ray3456s-projects.vercel.app"
+      "https://digigrowth.digital",
+      "https://www.digigrowth.digital"
     ];
 
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(null, true); // allow all temporarily
+      callback(new Error("Not allowed by CORS"));
     }
 
   },
-  methods: ["GET","POST","PUT","DELETE"],
-  allowedHeaders: ["Content-Type","Authorization"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
 
