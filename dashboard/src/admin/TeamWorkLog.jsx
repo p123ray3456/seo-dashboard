@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./styles/teamWorklog.css";
 
-const API = "https://digigrowth.digital";
+const API = "https://seo-dashboard-production-ec44.up.railway.app";
 
 const TeamWorkLog = () => {
 

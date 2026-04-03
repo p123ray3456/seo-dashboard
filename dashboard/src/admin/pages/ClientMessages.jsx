@@ -12,7 +12,7 @@ const ClientMessages = () => {
   const loadMessages = async () => {
 
     const res = await axios.get(
-      "https://digigrowth.digital/support-messages"
+      "https://seo-dashboard-production-ec44.up.railway.app/support-messages"
     );
 
     setMessages(res.data);

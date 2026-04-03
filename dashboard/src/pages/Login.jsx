@@ -21,7 +21,7 @@ const Login = () => {
 
     try {
       const res = await fetch(
-        "https://digigrowth.digital/auth/login",
+        "https://seo-dashboard-production-ec44.up.railway.app/auth/login",
         {
           method: "POST",
           headers: {

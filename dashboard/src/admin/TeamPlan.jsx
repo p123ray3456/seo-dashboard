@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const API = "https://digigrowth.digital";
+const API = "https://seo-dashboard-production-ec44.up.railway.app";
 
 const TeamPlan = () => {
 

@@ -27,7 +27,7 @@ const LeadsConversions = () => {
     setLoading(true);
 
     fetch(
-      `https://digigrowth.digital/seo/leads?clientId=${clientId}&month=${month}`
+      `https://seo-dashboard-production-ec44.up.railway.app/seo/leads?clientId=${clientId}&month=${month}`
     )
       .then((res) => res.json())
       .then((res) => {

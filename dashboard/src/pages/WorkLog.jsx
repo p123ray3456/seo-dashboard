@@ -16,7 +16,7 @@ const WorkLog = () => {
     try {
 
       const res = await fetch(
-        `https://digigrowth.digital/worklog-history/${clientId}`
+        `https://seo-dashboard-production-ec44.up.railway.app/worklog-history/${clientId}`
       );
 
       const data = await res.json();

@@ -26,7 +26,7 @@ const EditMonthlySummary = () => {
     try {
 
       const res = await axios.get(
-        "https://digigrowth.digital/clients"
+        "https://seo-dashboard-production-ec44.up.railway.app/clients"
       );
 
       setClients(res.data);

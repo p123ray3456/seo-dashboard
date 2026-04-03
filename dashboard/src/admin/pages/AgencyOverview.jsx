@@ -21,7 +21,7 @@ const AgencyOverview = () => {
 
     try{
 
-      const res = await axios.get("https://digigrowth.digital/clients");
+      const res = await axios.get("https://seo-dashboard-production-ec44.up.railway.app/clients");
 
       const clientsData = res.data;
 

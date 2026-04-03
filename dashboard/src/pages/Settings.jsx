@@ -17,7 +17,7 @@ const Settings = () => {
     try{
 
       const res = await axios.get(
-        `https://digigrowth.digital/clients/${clientId}`
+        `https://seo-dashboard-production-ec44.up.railway.app/clients/${clientId}`
       );
 
       setClient(res.data);
