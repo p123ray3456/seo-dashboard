@@ -21,7 +21,7 @@ app.use(cors({
 
     const allowedOrigins = [
       "http://localhost:5173",
-      "https://digigrowth.digital",
+      "https://seo-dashboard-p123ray3456s-projects.vercel.app",
       "https://www.digigrowth.digital"
     ];
 
