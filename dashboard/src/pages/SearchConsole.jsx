@@ -37,7 +37,7 @@ const SearchConsole = () => {
         }
 
         const res = await fetch(
-          `https://seo-dashboard-production-ec44.up.railway.app/seo/search-console?clientId=${clientId}&range=${range}`,
+          `https://digigrowth.digital/seo/search-console?clientId=${clientId}&range=${range}`,
           { cache: "no-store" }
         );
 

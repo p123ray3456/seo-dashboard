@@ -24,7 +24,7 @@ const MonthlySummary = () => {
       try {
 
         const res = await fetch(
-          `https://seo-dashboard-production-ec44.up.railway.app/worklog-history/${clientId}`
+          `https://digigrowth.digital/worklog-history/${clientId}`
         );
 
         const data = await res.json();

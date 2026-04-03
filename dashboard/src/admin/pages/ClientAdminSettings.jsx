@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-const API = "https://seo-dashboard-production-ec44.up.railway.app"; // ✅ IMPORTANT FIX
+const API = "https://digigrowth.digital"; // ✅ IMPORTANT FIX
 
 /* =====================================================
    MAIN COMPONENT

@@ -17,7 +17,7 @@ const EditClient = () => {
 
   /* FETCH CLIENT FROM MONGODB */
   useEffect(() => {
-    fetch(`https://seo-dashboard-production-ec44.up.railway.app/clients/${clientId}`)
+    fetch(`https://digigrowth.digital/clients/${clientId}`)
       .then((res) => res.json())
       .then((data) => {
         setForm({
@@ -46,7 +46,7 @@ const EditClient = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`https://seo-dashboard-production-ec44.up.railway.app/clients/${clientId}`, {
+      const res = await fetch(`https://digigrowth.digital/clients/${clientId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const EditClient = () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await fetch(`https://seo-dashboard-production-ec44.up.railway.app/clients/${clientId}`, {
+      const res = await fetch(`https://digigrowth.digital/clients/${clientId}`, {
         method: "DELETE",
       });
 

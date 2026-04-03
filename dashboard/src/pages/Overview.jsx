@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import jsPDF from "jspdf";
 
-const API = "https://seo-dashboard-production-ec44.up.railway.app";
+const API = "https://digigrowth.digital";
 
 const Overview = () => {
 

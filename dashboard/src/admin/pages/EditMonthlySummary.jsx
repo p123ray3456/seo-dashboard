@@ -26,7 +26,7 @@ const EditMonthlySummary = () => {
     try {
 
       const res = await axios.get(
-        "https://seo-dashboard-production-ec44.up.railway.app/clients"
+        "https://digigrowth.digital/clients"
       );
 
       setClients(res.data);
@@ -194,4 +194,4 @@ const EditMonthlySummary = () => {
 
 };
 
-export default EditMonthlySummary;
+export default EditMonthlySummary;  

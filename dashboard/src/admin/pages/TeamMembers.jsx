@@ -69,7 +69,7 @@ const TeamMembers = () => {
     const newStatus = member.status === "Active" ? "Away" : "Active";
 
     await axios.put(
-      `https://seo-dashboard-production-ec44.up.railway.app/team-members/${member._id}`,
+      `https://digigrowth.digital/team-members/${member._id}`,
       { status: newStatus }
     );
 

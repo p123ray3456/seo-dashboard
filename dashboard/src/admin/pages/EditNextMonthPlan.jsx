@@ -67,7 +67,7 @@ const EditNextMonthPlan = () => {
     }));
 
     await axios.post(
-      "https://seo-dashboard-production-ec44.up.railway.app/next-month-plan",
+      "https://digigrowth.digital/next-month-plan",
       {
         clientId,
         month,
