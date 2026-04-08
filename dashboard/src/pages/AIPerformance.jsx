@@ -23,7 +23,7 @@ const AIPerformance = () => {
   useEffect(() => {
     setLoading(true);
 
-    fetch(`http://localhost:5000/api/ai-engine/${clientId}`)
+    fetch(`http://seo-dashboard-production-ec44.up.railway.app/api/ai-engine/${clientId}`)
       .then(res => res.json())
       .then(res => {
         const pages = res.pages || [];
