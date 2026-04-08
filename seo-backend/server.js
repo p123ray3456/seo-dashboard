@@ -6,10 +6,11 @@ const { MongoClient } = require("mongodb");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
-
+const aiEngineRoutes = require("./routes/aiEngine");
+const gscKeywordsRoutes = require("./routes/gscKeywords");
 const teamMembers = require("./routes/teamMembers");
 const seoRoutes = require("./routes/seo.routes");
-
+const gscRoutes = require("./routes/gscRoutes");
 const app = express();
 
 /* ========================= */
@@ -89,6 +90,10 @@ console.log("🔥 MongoDB Connected");
 
 app.use("/seo", seoRoutes);
 app.use("/team-members", teamMembers);
+
+app.use("/api/ai-engine", aiEngineRoutes);
+app.use("/api/gsc-keywords", gscKeywordsRoutes);
+app.use("/api/search-console", gscRoutes);
 
 /* ================= CLIENT APIs ================= */
 

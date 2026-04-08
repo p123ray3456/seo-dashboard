@@ -45,6 +45,7 @@ const ClientLayout = () => {
     { name: "Overview", path: "overview", icon: "bi-speedometer2" },
     { name: "Search Console", path: "search-console", icon: "bi-search" },
     { name: "Keyword Performance", path: "keywords", icon: "bi-bar-chart" },
+    { name: "AI Performance", path: "ai-performance", icon: "bi-cpu" },
     { name: "Traffic Growth", path: "traffic", icon: "bi-graph-up" },
     { name: "Daily Work Log", path: "work-log", icon: "bi-journal-text" },
     { name: "Monthly Summary", path: "monthly-summary", icon: "bi-calendar" },

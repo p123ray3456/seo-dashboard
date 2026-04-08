@@ -78,7 +78,7 @@ const TeamLayout = () => {
         <div className="sidebar-footer">
 
           <small>
-            © {new Date().getFullYear()} DigiGrowth Digital
+            © {new Date().getFullYear()} DigiGrowth Digital (Priyanshu)
           </small>
 
           <button

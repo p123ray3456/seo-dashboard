@@ -37,6 +37,7 @@ import Settings from "./pages/Settings";
 import Support from "./pages/Support";
 import LeadsConversions from "./pages/LeadsConversions";
 import ClientLayout from "./client/ClientLayout";
+import AIPerformance from "./pages/AIPerformance";
 function App() {
   return (
     <Routes>
@@ -67,6 +68,7 @@ function App() {
         <Route path="monthly-summary" element={<EditMonthlySummary />} />
         <Route path="next-month-plan" element={<EditNextMonthPlan />} />
         <Route path="messages" element={<ClientMessages />} />
+        {/* <Route path="ai-performance" element={<AIPerformance />} /> */}
         {/* Client Settings from Admin */}
         <Route
           path="clients/:clientId/settings"
@@ -100,6 +102,7 @@ function App() {
         <Route path="overview" element={<Overview />} />
         <Route path="search-console" element={<SearchConsole />} />
         <Route path="keywords" element={<KeywordPerformance />} />
+          <Route path="ai-performance" element={<AIPerformance />} />
         <Route path="traffic" element={<TrafficGrowth />} />
         <Route path="work-log" element={<WorkLog />} />
         <Route path="monthly-summary" element={<MonthlySummary />} />
