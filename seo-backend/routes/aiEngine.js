@@ -23,7 +23,7 @@ router.get("/:clientId", async (req, res) => {
 
     /* ===== GET GSC DATA ===== */
     const gscResponse = await axios.get(
-      `http://localhost:5000/api/search-console/${req.params.clientId}`
+      `https://seo-dashboard-production-ec44.up.railway.app/api/search-console/${req.params.clientId}`
     );
 
     const gscData = gscResponse.data;
